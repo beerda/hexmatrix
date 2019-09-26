@@ -1,10 +1,11 @@
-.listManipulationGenerator <- function(what) {
-  function(l, na.rm=FALSE) {
+#' @export
+elementwisely <- function(what) {
+  function(l, ...) {
     assert_that(is.list(l))
-    assert_that(is.flag(na.rm))
+    dots <- list(...)
 
     f <- function(...) {
-      what(c(...), na.rm=na.rm)
+      do.call(what, c(list(c(...)), dots))
     }
     if (length(l) == 0) {
       return(list())
@@ -17,15 +18,42 @@
   }
 }
 
+elementwisely <- function(l, FUN, ...) {
+  assert_that(is.list(l))
+  assert_that(is.function(FUN))
+  dots <- list(...)
+
+  f <- function(...) {
+    do.call(FUN, c(list(c(...)), dots))
+  }
+
+  if (length(l) == 0) {
+    return(list())
+  } else {
+    res <- l[[1]]
+    params <- list(FUN=f, SIMPLIFY=TRUE)
+    res[] <- do.call(mapply, c(l, params))
+    return(res)
+  }
+}
+
 
 #' @export
-listSum <- .listManipulationGenerator(sum)
+listSum <- function(l, na.rm=FALSE) {
+  elementwisely(l, sum, na.rm=na.rm)
+}
 
 #' @export
-listMean <- .listManipulationGenerator(mean)
+listMean <- function(l, na.rm=FALSE) {
+  elementwisely(l, mean, na.rm=na.rm)
+}
 
 #' @export
-listMin <- .listManipulationGenerator(min)
+listMin <- function(l, na.rm=FALSE) {
+  elementwisely(l, min, na.rm=na.rm)
+}
 
 #' @export
-listMax <- .listManipulationGenerator(max)
+listMax <- function(l, na.rm=FALSE) {
+  elementwisely(l, max, na.rm=na.rm)
+}
