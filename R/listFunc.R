@@ -17,5 +17,15 @@
   }
 }
 
+
 #' @export
 listSum <- .listManipulationGenerator(sum)
+
+#' @export
+listMean <- .listManipulationGenerator(mean)
+
+#' @export
+listMin <- .listManipulationGenerator(min)
+
+#' @export
+listMax <- .listManipulationGenerator(max)
