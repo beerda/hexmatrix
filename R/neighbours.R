@@ -1,6 +1,7 @@
 #' Returns a list of matrices that represent values of neighbours
 #' in the clock-wise order starting from top-left neighbour
 #' @export
+#' @import magrittr
 neighbours <- function(m) {
   assert_that(is.matrix(m))
 

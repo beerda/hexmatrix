@@ -1,23 +1,4 @@
 #' @export
-elementwisely <- function(what) {
-  function(l, ...) {
-    assert_that(is.list(l))
-    dots <- list(...)
-
-    f <- function(...) {
-      do.call(what, c(list(c(...)), dots))
-    }
-    if (length(l) == 0) {
-      return(list())
-    } else {
-      res <- l[[1]]
-      args <- list(FUN=f, SIMPLIFY=TRUE)
-      res[] <- do.call(mapply, c(l, args))
-      return(res)
-    }
-  }
-}
-
 elementwisely <- function(l, FUN, ...) {
   assert_that(is.list(l))
   assert_that(is.function(FUN))
