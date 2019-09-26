@@ -15,6 +15,6 @@ test_that("listSum", {
 
   expect_equal(listSum(list(NA_real_, 1), na.rm=TRUE), 1)
   expect_equal(listSum(list(NA_real_, 1), na.rm=FALSE), NA_real_)
-  expect_equal(listSum(list(NA_real_, NA_real_), na.rm=TRUE), NA_real_)
+  expect_equal(listSum(list(NA_real_, NA_real_), na.rm=TRUE), 0)
   expect_equal(listSum(list(NA_real_, NA_real_), na.rm=FALSE), NA_real_)
 })
