@@ -3,7 +3,7 @@
 shiftDown <- function(m) {
   assert_that(is.matrix(m))
 
-  rbind(NA, m[-nrow(m), ])
+  rbind(NA, m[-nrow(m), , drop=FALSE])
 }
 
 
@@ -11,7 +11,7 @@ shiftDown <- function(m) {
 shiftUp <- function(m) {
   assert_that(is.matrix(m))
 
-  rbind(m[-1, ], NA)
+  rbind(m[-1, , drop=FALSE], NA)
 }
 
 
@@ -22,7 +22,7 @@ shiftRight <- function(m,
   assert_that(is.flag(odd))
 
   rows <- seq_len(nrow(m)) %% 2 == (odd + 0)
-  m[rows, ] <- cbind(NA, m[rows, -ncol(m)])
+  m[rows, ] <- cbind(NA, m[rows, -ncol(m), drop=FALSE])
   m
 }
 
@@ -34,6 +34,6 @@ shiftLeft <- function(m,
   assert_that(is.flag(odd))
 
   rows <- seq_len(nrow(m)) %% 2 == (odd + 0)
-  m[rows, ] <- cbind(m[rows, -1], NA)
+  m[rows, ] <- cbind(m[rows, -1, drop=FALSE], NA)
   m
 }
