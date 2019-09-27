@@ -14,5 +14,6 @@ LazyData: true
 Suggests: 
     testthat (>= 2.1.0)
 Imports: 
-    assertthat
+    assertthat,
+    magrittr
 RoxygenNote: 6.1.1
