@@ -12,11 +12,11 @@ hexconvol <- function(m,
 
   p <- rep(probs, length.out=7)
   n <- neighbours(m)
-  n[[7]] <- m
+  n <- array(c(n, m), dim=dim(n) + c(0,0,1)) # put m into n[, , 7]
 
   f <- function(...) {
     x <- c(...)
     sum(x * p, na.rm=TRUE)
   }
-  elementwisely(n, f)
+  apply(n, c(1, 2), f)
 }
