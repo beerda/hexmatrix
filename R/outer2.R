@@ -9,15 +9,6 @@ outer2 <- function(f, ...) {
     return(NULL)
   }
 
-  #ntimes <- c(rev(cumprod(rev(udims[-1]))), 1)
-  #neach <- c(1, cumprod(udims[-length(udims)]))
-  #indices <- NULL
-  #for (d in seq_along(udims)) {
-    #i <- seq_len(udims[d])
-    #indices <- c(indices, rep(i, each=neach[d], times=ntimes[d]))
-  #}
-  #indices <- matrix(indices, ncol=length(udims))
-
   res <- sapply(seq_len(prod(udims)), function(i) {
     a <- list()
     for (p in seq_along(pdims)) {
