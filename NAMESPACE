@@ -3,6 +3,7 @@
 export(hexconvol)
 export(long)
 export(neighbours)
+export(neighrel)
 export(outer2)
 export(reachability)
 export(shiftDown)
