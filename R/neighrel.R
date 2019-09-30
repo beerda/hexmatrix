@@ -20,7 +20,7 @@ neighrel <- function(f, ...) {
     a <- lapply(seq_along(dots), function(i) {
       c(ns[[i]][x, y, direction], dots[[i]][x, y])
     })
-    a <- as.list(unlist(a))
+    a <- as.list(unlist(a, use.names=FALSE))
     do.call(f, a)
   }
   outer2(ff, seq_len(dims[1]), seq_len(dims[2]), seq_len(dims[3]))
