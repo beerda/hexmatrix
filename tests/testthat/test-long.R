@@ -17,3 +17,18 @@ test_that("long", {
   expect_equal(res[, 3], 1:12)
   expect_equal(res[, 4], 2 * 1:12)
 })
+
+
+test_that("long naming of columns", {
+  m1 <- matrix(1:12, nrow=4, byrow=FALSE)
+  m2 <- matrix(2 * 1:12, nrow=4, byrow=FALSE)
+
+  res <- long(m1, m2)
+  expect_equal(colnames(res), c('row', 'col', 'm1', 'm2'))
+
+  res <- long(a=m1, b=m2)
+  expect_equal(colnames(res), c('row', 'col', 'a', 'b'))
+
+  res <- long(a=m1, m2)
+  expect_equal(colnames(res), c('row', 'col', 'a', 'm2'))
+})

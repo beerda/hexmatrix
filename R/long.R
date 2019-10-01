@@ -1,10 +1,14 @@
 #' @export
 long <- function(...) {
-  paramNames <- as.character(as.list(match.call()))[-1]
   params <- list(...)
   if (length(params) == 0) {
     return(data.frame())
   }
+  paramNames <- as.character(as.list(match.call()))[-1]
+  if (!is.null(names(params))) {
+    paramNames <- ifelse(names(params) == '', paramNames, names(params))
+  }
+
   m <- params[[1]]
   assert_that(is.matrix(m))
   res <- which(m==m, arr.ind=TRUE, useNames=FALSE)
@@ -16,4 +20,15 @@ long <- function(...) {
   }
   colnames(res) <- c('row', 'col', paramNames)
   res
+}
+
+
+f <- function(...) {
+  dots <- list(...)
+  if (length(dots) == 0) {
+    return(data.frame())
+  }
+  paramNames <- as.character(as.list(match.call()))[-1]
+  print(names(dots))
+  print(paramNames)
 }
