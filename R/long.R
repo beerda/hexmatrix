@@ -21,14 +21,3 @@ long <- function(...) {
   colnames(res) <- c('row', 'col', paramNames)
   res
 }
-
-
-f <- function(...) {
-  dots <- list(...)
-  if (length(dots) == 0) {
-    return(data.frame())
-  }
-  paramNames <- as.character(as.list(match.call()))[-1]
-  print(names(dots))
-  print(paramNames)
-}
