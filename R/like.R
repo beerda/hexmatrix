@@ -33,6 +33,9 @@ like.matrix <- function(m, data=.empty, nrow=.empty, ncol=.empty, byrow=FALSE, d
     dimnames <- base::dimnames(m)
     dimnames <- list(.fixDimname(dimnames[[1]], nrow), .fixDimname(dimnames[[2]], ncol))
   }
+  if (all(sapply(dimnames, is.null))) {
+    dimnames <- NULL
+  }
   if (identical(data, .empty)) {
     data <- as.vector(m[seq_len(nrow), seq_len(ncol)])
   }
@@ -51,6 +54,9 @@ like.array <- function(a, data=.empty, dim=.empty, dimnames=.empty) {
     dimnames <- lapply(seq_along(dim), function(i) {
       .fixDimname(dimnames[[i]], dim[i])
     })
+  }
+  if (all(sapply(dimnames, is.null))) {
+    dimnames <- NULL
   }
   if (identical(data, .empty)) {
     data <- do.call(`[`, c(list(a), lapply(dim, seq_len)))
