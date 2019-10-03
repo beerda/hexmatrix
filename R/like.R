@@ -9,10 +9,12 @@ like <- function(...) {
 
 
 .fixDimname <- function(x, len) {
-  if (length(x) < len) {
-    x <- c(x, rep(NA, length(x) - len))
-  } else if (length(x) > len) {
-    x <- x[seq_len(len)]
+  if (!is.null(x)) {
+    if (length(x) < len) {
+      x <- c(x, rep(NA, length(x) - len))
+    } else if (length(x) > len) {
+      x <- x[seq_len(len)]
+    }
   }
   x
 }
