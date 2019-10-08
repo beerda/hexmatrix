@@ -1,13 +1,17 @@
 #' @export
-long <- function(...) {
+long <- function(..., .forPlot=FALSE) {
+  assert_that(is.flag(.forPlot))
   params <- list(...)
   if (length(params) == 0) {
     return(data.frame())
   }
-  paramNames <- as.character(as.list(match.call()))[-1]
+  paramNames <- as.character(as.list(match.call()))
+  paramNames <- paramNames[-1]         # remove function name
+  length(paramNames) <- length(params) # remove .forPlot
   if (!is.null(names(params))) {
     paramNames <- ifelse(names(params) == '', paramNames, names(params))
   }
+  paramNames <- setdiff(paramNames, '.forPlot')
 
   m <- params[[1]]
   assert_that(is.matrix(m))
@@ -18,6 +22,13 @@ long <- function(...) {
     assert_that(all(dim(params[[i]] == dim(m))))
     res <- cbind(res, as.vector(params[[i]]))
   }
-  colnames(res) <- c('row', 'col', paramNames)
+
+  if (.forPlot) {
+    colnames(res) <- c('y', 'x', paramNames)
+    oddy <- res$y %% 2 == 1
+    res[oddy, 'x'] <- res[oddy, 'x'] + 0.5
+  } else {
+    colnames(res) <- c('row', 'col', paramNames)
+  }
   res
 }
