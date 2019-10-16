@@ -3,6 +3,7 @@
 S3method(like,array)
 S3method(like,matrix)
 export("rowcol<-")
+export(combine)
 export(hexconvol)
 export(like)
 export(long)
