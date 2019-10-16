@@ -11,8 +11,7 @@ hexconvol <- function(m,
   assert_that(is.vector(probs) & is.numeric(probs))
 
   p <- rep(probs, length.out=7)
-  n <- neighbours(m)
-  n <- array(c(n, m), dim=dim(n) + c(0,0,1)) # put m into n[, , 7]
+  n <- neighbours(m, TRUE)
 
   f <- function(...) {
     x <- c(...)
