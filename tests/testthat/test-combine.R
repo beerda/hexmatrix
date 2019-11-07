@@ -15,6 +15,10 @@ test_that("combine lists", {
                        list(NULL, NULL, NULL, 2, 4, 6)),
                list(1, 2, 3, 2, 4, 6))
 
+  expect_equal(combine(list(NULL, NULL, 3),
+                       list()),
+               list(NULL, NULL, 3))
+
   a <- list()
   a[[3]] <- 10
   b <- list()
