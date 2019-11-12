@@ -68,3 +68,16 @@ test_that("long naming of columns for plot", {
   res <- long(a=m1, m2, .forPlot=TRUE)
   expect_equal(colnames(res), c('y', 'x', 'a', 'm2'))
 })
+
+
+test_that("NA in long call", {
+  m1 <- matrix(1:12, nrow=4, byrow=FALSE)
+  m1[2, 2] <- NA
+
+  res <- long(m1)
+  expect_true(is.data.frame(res))
+  expect_equal(colnames(res), c('row', 'col', 'm1'))
+  expect_equal(res[, 1], rep(1:4, times=3))
+  expect_equal(res[, 2], rep(1:3, each=4))
+  expect_equal(res[, 3], c(1:5, NA_real_, 7:12))
+})

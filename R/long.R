@@ -15,7 +15,8 @@ long <- function(..., .forPlot=FALSE) {
 
   m <- params[[1]]
   assert_that(is.matrix(m))
-  res <- which(m==m, arr.ind=TRUE, useNames=FALSE)
+  res <- which(m==m | is.na(m), arr.ind=TRUE, useNames=FALSE)
+  #res <- which(m==m, arr.ind=TRUE, useNames=FALSE)
   res <- as.data.frame(res)
   for (i in seq_along(params)) {
     assert_that(is.matrix(params[[i]]))
