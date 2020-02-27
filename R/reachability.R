@@ -20,9 +20,9 @@ reachability <- function(m,
     n <- neighbours(m)
     n <- array(c(n, dist), dim=c(rows, cols, 12))
     s <- apply(n, c(1, 2), function(h) {
-      suppressWarnings(min(h[1:6] + h[7:12], na.rm=TRUE))
+      min(h[1:6] + h[7:12], Inf, na.rm=TRUE)
     })
-    m <- suppressWarnings(pmin(m, s, na.rm=TRUE))
+    m <- pmin(m, s, Inf, na.rm=TRUE)
   }
   m
 }
