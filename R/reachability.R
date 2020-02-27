@@ -18,10 +18,13 @@ reachability <- function(m,
   while (!identical(old, m)) {
     old <- m
     n <- neighbours(m)
-    n <- array(c(n, dist), dim=c(rows, cols, 12))
-    s <- apply(n, c(1, 2), function(h) {
-      min(h[1:6] + h[7:12], Inf, na.rm=TRUE)
-    })
+    s <- pmin(n[, , 1] + dist[, , 1],
+              n[, , 2] + dist[, , 2],
+              n[, , 3] + dist[, , 3],
+              n[, , 4] + dist[, , 4],
+              n[, , 5] + dist[, , 5],
+              n[, , 6] + dist[, , 6],
+              Inf, na.rm=TRUE)
     m <- pmin(m, s, Inf, na.rm=TRUE)
   }
   m
