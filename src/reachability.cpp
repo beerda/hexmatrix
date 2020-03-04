@@ -10,39 +10,16 @@ public:
   int x;
   int y;
   double price;
-
-  Vertex(int ax, int ay, double aPrice = 0) : x(ax), y(ay), price(aPrice) { }
-
-  Vertex neighbour(int dir) {
-    int newX = x + Vertex::xDiff[dir];
-    int newY;
-    if (x % 2 == 0) {
-      newY = y + Vertex::yDiffEven[dir];
-    } else {
-      newY = y + Vertex::yDiffOdd[dir];
-    }
-    Vertex res = Vertex(newX, newY);
-    return res;
-  }
-
-private:
-  static int xDiff[6];
-  static int yDiffOdd[6];
-  static int yDiffEven[6];
+  Vertex(int ax, int ay, double aPrice) : x(ax), y(ay), price(aPrice)  { }
 };
-
-int Vertex::xDiff[6] = {-1, -1, 0, 1, 1, 0};
-int Vertex::yDiffOdd[6] = {-1, 0, 1, 0, -1, -1 };
-int Vertex::yDiffEven[6] = {0, 1, 1, 1, 0, -1};
 
 bool operator<(const Vertex& v1, const Vertex& v2) {
   return v1.price > v2.price;
 }
 
-
-inline const int oppositeDirection(const int dir) {
-  return (dir + 3) % 6;
-}
+int xDiff[6] = {-1, -1, 0, 1, 1, 0};
+int yDiffOdd[6] = {-1, 0, 1, 0, -1, -1 };
+int yDiffEven[6] = {0, 1, 1, 1, 0, -1};
 
 
 // [[Rcpp::export(name=".reachability")]]
@@ -51,8 +28,9 @@ List reachability(const NumericMatrix m, const NumericVector dist) {
   std::priority_queue<Vertex> queue;
   int rows = m.nrow();
   int cols = m.ncol();
-  int rowcol = rows * cols;
+  int rowcols = rows * cols;
 
+  // init queue
   for (int x = 0; x < rows; ++x) {
     for (int y = 0; y < cols; ++y) {
       double val = m(x, y);
@@ -63,21 +41,31 @@ List reachability(const NumericMatrix m, const NumericVector dist) {
     }
   }
 
+  // main loop
   while (!queue.empty()) {
     Vertex cur = queue.top();
     queue.pop();
+
     for (int dir = 0; dir < 6; ++dir) {
-      Vertex other = cur.neighbour(dir);
-      if (other.x < 0 || other.y < 0 || other.x >= rows || other.y >= cols)
+      int otherX = cur.x + xDiff[dir];
+      if (otherX < 0 || otherX >= rows)
         continue;
-      other.price = res(other.x, other.y);
-      double edgePrice = dist(other.x + rows * other.y + rowcol * oppositeDirection(dir));
-      if (traits::is_finite<REALSXP>(edgePrice)) {
-        if ((!traits::is_finite<REALSXP>(other.price)) || (other.price > cur.price + edgePrice)) {
-          res(other.x, other.y) = cur.price + edgePrice;
-          other.price = res(other.x, other.y);
-          queue.push(other);
-        }
+
+      int otherY = cur.y + ((cur.x % 2 == 0) ? yDiffEven[dir] : yDiffOdd[dir]);
+      if (otherY < 0 || otherY >= cols)
+        continue;
+
+      double edgePrice = dist[otherX + rows * otherY + rowcols * ((dir + 3) % 6)];
+      if (!traits::is_finite<REALSXP>(edgePrice))
+        continue;
+
+      double otherPrice = res(otherX, otherY);
+      double newPrice = cur.price + edgePrice;
+
+      if ((!traits::is_finite<REALSXP>(otherPrice)) || (otherPrice > newPrice)) {
+        res(otherX, otherY) = newPrice;
+        Vertex other = Vertex(otherX, otherY, newPrice);
+        queue.push(other);
       }
     }
   }
