@@ -15,5 +15,9 @@ Suggests:
     testthat (>= 2.1.0)
 Imports: 
     assertthat,
-    magrittr
+    magrittr,
+    Rcpp
 RoxygenNote: 7.0.2
+SystemRequirements: C++11
+LinkingTo: 
+    Rcpp
