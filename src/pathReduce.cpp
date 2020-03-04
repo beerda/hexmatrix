@@ -10,13 +10,14 @@ public:
   RObject* cache;
   List data;
   NumericMatrix path;
+  RObject origin;
   Function f;
   int rows;
   int cols;
   int rowcols;
 
-  PathReduceContext(List aData, NumericMatrix aPath, Function aF) :
-    cache(NULL), data(aData), path(aPath), f(aF),
+  PathReduceContext(List aData, NumericMatrix aPath, RObject aOrigin, Function aF) :
+    cache(NULL), data(aData), path(aPath), origin(aOrigin), f(aF),
     rows(aPath.nrow()), cols(aPath.ncol()), rowcols(aPath.nrow() * aPath.ncol())
   { cache = new RObject[rowcols]; }
 
@@ -32,12 +33,12 @@ RObject pathReduceInternal(const int i, PathReduceContext &ctx) {
 
   int dir = ctx.path[i];
   if (dir == 0) { // initial point (root)
-    ctx.cache[i] = ctx.data[i];
+    ctx.cache[i] = ctx.origin;
     return ctx.cache[i];
   }
   dir--; // switch to C-like direction indexing
 
-  ctx.cache[i] = LogicalVector::create(NA_LOGICAL); // zabrani cyklickym cestam
+  ctx.cache[i] = LogicalVector::create(NA_LOGICAL); // avoid infinite loop in cyclic paths
 
   int curX = i % ctx.rows;
   int curY = i / ctx.rows;
@@ -48,14 +49,14 @@ RObject pathReduceInternal(const int i, PathReduceContext &ctx) {
   }
 
   RObject res = pathReduceInternal(otherX + ctx.rows * otherY, ctx);
-  ctx.cache[i] = ctx.f(ctx.data[i], res);
+  ctx.cache[i] = ctx.f(ctx.data[i + ctx.rowcols * dir], res);
   return ctx.cache[i];
 }
 
 
 // [[Rcpp::export(name=".pathReduce")]]
-List pathReduce(const List data, const NumericMatrix path, const Function f) {
-  PathReduceContext ctx = PathReduceContext(data, path, f);
+List pathReduce(const List data, const NumericMatrix path, const RObject origin, const Function f) {
+  PathReduceContext ctx = PathReduceContext(data, path, origin, f);
   List result;
 
   for (int i = 0; i < ctx.rowcols; ++i) {
