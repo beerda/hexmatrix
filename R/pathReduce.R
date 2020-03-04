@@ -22,7 +22,7 @@ pathReduce <- function(m, path, origin, f) {
   if (length(len) == 1) {
     res <- unlist(res)
     if (len == 1) {
-      return(matrix(res, nrow=nrow(m)))
+      return(matrix(res, nrow=nrow(path)))
     } else {
       return(array(res, dim=c(dim(m), len)))
     }
