@@ -14,6 +14,5 @@ reachability <- function(m,
   assert_that(is.array(dist))
   assert_that(all(dim(dist) == c(rows, cols, 6)))
 
-  res <- .Call('_hexmatrix_reachability', PACKAGE = 'hexmatrix', m, dist)
-  res$prices
+  .Call('_hexmatrix_reachability', PACKAGE = 'hexmatrix', m, dist)
 }

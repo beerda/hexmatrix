@@ -17,6 +17,7 @@ bool operator<(const Vertex& v1, const Vertex& v2) {
   return v1.price > v2.price;
 }
 
+
 int xDiff[6] = {-1, -1, 0, 1, 1, 0};
 int yDiffOdd[6] = {-1, 0, 1, 0, -1, -1 };
 int yDiffEven[6] = {0, 1, 1, 1, 0, -1};
@@ -24,20 +25,27 @@ int yDiffEven[6] = {0, 1, 1, 1, 0, -1};
 
 // [[Rcpp::export(name=".reachability")]]
 List reachability(const NumericMatrix m, const NumericVector dist) {
-  NumericMatrix res = NumericMatrix(clone(m));
-  std::priority_queue<Vertex> queue;
   int rows = m.nrow();
   int cols = m.ncol();
   int rowcols = rows * cols;
+  NumericMatrix priceMatrix = NumericMatrix(clone(m));  // cloned m
+  NumericMatrix pathMatrix = NumericMatrix(rows, cols); // zero-filled
+  NumericVector initx = NumericVector();
+  NumericVector inity = NumericVector();
+  std::priority_queue<Vertex> queue;
 
-  // init queue
-  for (int x = 0; x < rows; ++x) {
-    for (int y = 0; y < cols; ++y) {
-      double val = m(x, y);
-      if (traits::is_finite<REALSXP>(val)) {
-        Vertex v = Vertex(x, y, val);
-        queue.push(v);
-      }
+  // init
+  for (int i = 0; i < rowcols; ++i) {
+    double val = m[i];
+    if (traits::is_finite<REALSXP>(val)) {
+      int x = i % rows;
+      int y = i / rows;
+      initx.push_back(x + 1);
+      inity.push_back(y + 1);
+      Vertex v = Vertex(x, y, val);
+      queue.push(v);
+    } else {
+      pathMatrix[i] = NA_REAL;
     }
   }
 
@@ -55,21 +63,26 @@ List reachability(const NumericMatrix m, const NumericVector dist) {
       if (otherY < 0 || otherY >= cols)
         continue;
 
-      double edgePrice = dist[otherX + rows * otherY + rowcols * ((dir + 3) % 6)];
+      int oppositeDir = (dir + 3) % 6;
+      double edgePrice = dist[otherX + rows * otherY + rowcols * oppositeDir];
       if (!traits::is_finite<REALSXP>(edgePrice))
         continue;
 
-      double otherPrice = res(otherX, otherY);
+      double otherPrice = priceMatrix(otherX, otherY);
       double newPrice = cur.price + edgePrice;
 
       if ((!traits::is_finite<REALSXP>(otherPrice)) || (otherPrice > newPrice)) {
-        res(otherX, otherY) = newPrice;
+        priceMatrix(otherX, otherY) = newPrice;
+        pathMatrix(otherX, otherY) = oppositeDir + 1;
         Vertex other = Vertex(otherX, otherY, newPrice);
         queue.push(other);
       }
     }
   }
 
-  List result = List::create(_["prices"] = res);
-  return result;
+  return List::create(
+    _["prices"] = priceMatrix,
+    _["paths"] = pathMatrix,
+    _["initRows"] = initx,
+    _["initCols"] = inity);
 }
