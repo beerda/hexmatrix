@@ -5,6 +5,19 @@
 
 using namespace Rcpp;
 
+// pathReduce
+List pathReduce(const List data, const NumericMatrix path, const Function f);
+RcppExport SEXP _hexmatrix_pathReduce(SEXP dataSEXP, SEXP pathSEXP, SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const List >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix >::type path(pathSEXP);
+    Rcpp::traits::input_parameter< const Function >::type f(fSEXP);
+    rcpp_result_gen = Rcpp::wrap(pathReduce(data, path, f));
+    return rcpp_result_gen;
+END_RCPP
+}
 // reachability
 List reachability(const NumericMatrix m, const NumericVector dist);
 RcppExport SEXP _hexmatrix_reachability(SEXP mSEXP, SEXP distSEXP) {
@@ -19,6 +32,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_hexmatrix_pathReduce", (DL_FUNC) &_hexmatrix_pathReduce, 3},
     {"_hexmatrix_reachability", (DL_FUNC) &_hexmatrix_reachability, 2},
     {NULL, NULL, 0}
 };

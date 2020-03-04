@@ -1,6 +1,6 @@
 #include <Rcpp.h>
 #include <queue>
-
+#include "neighbourIndices.h"
 
 using namespace Rcpp;
 
@@ -16,11 +16,6 @@ public:
 bool operator<(const Vertex& v1, const Vertex& v2) {
   return v1.price > v2.price;
 }
-
-
-int xDiff[6] = {-1, -1, 0, 1, 1, 0};
-int yDiffOdd[6] = {-1, 0, 1, 0, -1, -1 };
-int yDiffEven[6] = {0, 1, 1, 1, 0, -1};
 
 
 // [[Rcpp::export(name=".reachability")]]
