@@ -26,7 +26,10 @@ public:
 };
 
 
-RObject pathReduceInternal(const int i, PathReduceContext &ctx) {
+LogicalVector naVec = LogicalVector::create(NA_LOGICAL);
+
+
+RObject pathReduceInternal(const int i, PathReduceContext& ctx) {
   if (ctx.cache[i] != R_NilValue) {
     return ctx.cache[i];
   }
@@ -38,18 +41,17 @@ RObject pathReduceInternal(const int i, PathReduceContext &ctx) {
   }
   dir--; // switch to C-like direction indexing
 
-  ctx.cache[i] = LogicalVector::create(NA_LOGICAL); // avoid infinite loop in cyclic paths
+  ctx.cache[i] = naVec; // avoid infinite loop in cyclic paths
 
   int curX = i % ctx.rows;
   int curY = i / ctx.rows;
   int otherX = curX + xDiff[dir];
   int otherY = curY + ((curX % 2 == 0) ? yDiffEven[dir] : yDiffOdd[dir]);
-  if (otherX < 0 || otherX >= ctx.rows || otherY < 0 || otherY >= ctx.cols) {
-    return ctx.cache[i];
+  if (otherX >= 0 && otherX < ctx.rows && otherY >= 0 && otherY < ctx.cols) {
+    RObject res = pathReduceInternal(otherX + ctx.rows * otherY, ctx);
+    ctx.cache[i] = ctx.f(ctx.data[i + ctx.rowcols * dir], res);
   }
 
-  RObject res = pathReduceInternal(otherX + ctx.rows * otherY, ctx);
-  ctx.cache[i] = ctx.f(ctx.data[i + ctx.rowcols * dir], res);
   return ctx.cache[i];
 }
 
@@ -57,10 +59,10 @@ RObject pathReduceInternal(const int i, PathReduceContext &ctx) {
 // [[Rcpp::export(name=".pathReduce")]]
 List pathReduce(const List data, const NumericMatrix path, const RObject origin, const Function f) {
   PathReduceContext ctx = PathReduceContext(data, path, origin, f);
-  List result;
+  List result(ctx.rowcols);
 
   for (int i = 0; i < ctx.rowcols; ++i) {
-    result.push_back(pathReduceInternal(i, ctx));
+    result[i] = pathReduceInternal(i, ctx);
   }
 
   return result;
