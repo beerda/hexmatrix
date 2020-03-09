@@ -13,15 +13,12 @@ neighrel <- function(f, ...) {
   }
   assert_that(is.function(f))
 
-  ns <- lapply(dots, neighbours)
-  dims <- dim(ns[[1]])
-
-  ff <- function(x, y, direction) {
-    a <- lapply(seq_along(dots), function(i) {
-      c(ns[[i]][x, y, direction], dots[[i]][x, y])
-    })
-    a <- as.list(unlist(a, use.names=FALSE))
-    do.call(f, a)
-  }
-  outer2(ff, seq_len(dims[1]), seq_len(dims[2]), seq_len(dims[3]))
+  neigh <- lapply(dots, neighbours)
+  dims <- dim(neigh[[1]])
+  curr <- lapply(dots, function(m) array(m, dim=dims))
+  indices <- rep(seq_along(dots), each=2) + c(0, length(dots))
+  args <- c(neigh, curr)
+  args <- args[indices]
+  res <- do.call(mapply, c(list(f), args))
+  array(res, dim=dims)
 }
