@@ -5,6 +5,18 @@
 
 using namespace Rcpp;
 
+// path
+NumericVector path(int to, NumericMatrix paths);
+RcppExport SEXP _hexmatrix_path(SEXP toSEXP, SEXP pathsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type to(toSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type paths(pathsSEXP);
+    rcpp_result_gen = Rcpp::wrap(path(to, paths));
+    return rcpp_result_gen;
+END_RCPP
+}
 // pathReduce
 List pathReduce(const List data, const NumericMatrix path, const RObject origin, const Function f);
 RcppExport SEXP _hexmatrix_pathReduce(SEXP dataSEXP, SEXP pathSEXP, SEXP originSEXP, SEXP fSEXP) {
@@ -33,6 +45,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_hexmatrix_path", (DL_FUNC) &_hexmatrix_path, 2},
     {"_hexmatrix_pathReduce", (DL_FUNC) &_hexmatrix_pathReduce, 4},
     {"_hexmatrix_reachability", (DL_FUNC) &_hexmatrix_reachability, 2},
     {NULL, NULL, 0}
