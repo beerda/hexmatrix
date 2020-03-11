@@ -34,24 +34,23 @@ RObject pathReduceInternal(const int i, PathReduceContext& ctx) {
     return ctx.cache[i];
   }
 
-  int dir = ctx.path[i];
-  if (dir == 0) { // initial point (root)
+  int next = ctx.path[i];
+  if (next == 0) { // initial point (root)
     ctx.cache[i] = ctx.origin;
     return ctx.cache[i];
   }
 
-  dir--; // switch to C-like direction indexing
+  next--; // switch to C-like indexing
   ctx.cache[i] = naVec; // avoid infinite loop in cyclic paths
 
-  if (dir >= 0 && dir <= 5) {
-    int curX = i % ctx.rows;
-    int curY = i / ctx.rows;
-    int otherX = curX + xDiff[dir];
-    int otherY = curY + ((curX % 2 == 0) ? yDiffEven[dir] : yDiffOdd[dir]);
-    if (otherX >= 0 && otherX < ctx.rows && otherY >= 0 && otherY < ctx.cols) {
-      RObject res = pathReduceInternal(otherX + ctx.rows * otherY, ctx);
-      ctx.cache[i] = ctx.f(ctx.data[i + ctx.rowcols * dir], res);
+  if (next >= 0 && next <= ctx.rowcols) {
+    int dir = 0;
+    for (; dir < 6; ++dir) {
+      if (neigh(dir, i, ctx.rows, ctx.cols) == next)
+        break;
     }
+    RObject res = pathReduceInternal(next, ctx);
+    ctx.cache[i] = ctx.f(ctx.data[i + ctx.rowcols * dir], res);
   }
 
   return ctx.cache[i];

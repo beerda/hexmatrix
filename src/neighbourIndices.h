@@ -5,4 +5,6 @@ extern int xDiff[];
 extern int yDiffOdd[];
 extern int yDiffEven[];
 
+extern int neigh(int dir, int i, int rows, int cols);
+
 #endif

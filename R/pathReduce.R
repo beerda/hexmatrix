@@ -12,8 +12,8 @@ pathReduce <- function(m, path, origin, f) {
   assert_that(is.matrix(path))
   assert_that(is.numeric(path))
   assert_that(all(dim(m) == c(nrow(path), ncol(path), 6)))
-  assert_that(min(path, na.rm=TRUE) == 0)
-  assert_that(max(path, na.rm=TRUE) == 6)
+  assert_that(min(path, na.rm=TRUE) >= 0)
+  assert_that(max(path, na.rm=TRUE) <= length(path))
   assert_that(is.function(f))
 
   res <- .Call('_hexmatrix_pathReduce', PACKAGE = 'hexmatrix', as.list(m), path, origin, f)
