@@ -5,6 +5,20 @@
 
 using namespace Rcpp;
 
+// whichDir
+int whichDir(int cur, int other, int rows, int cols);
+RcppExport SEXP _hexmatrix_whichDir(SEXP curSEXP, SEXP otherSEXP, SEXP rowsSEXP, SEXP colsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type cur(curSEXP);
+    Rcpp::traits::input_parameter< int >::type other(otherSEXP);
+    Rcpp::traits::input_parameter< int >::type rows(rowsSEXP);
+    Rcpp::traits::input_parameter< int >::type cols(colsSEXP);
+    rcpp_result_gen = Rcpp::wrap(whichDir(cur, other, rows, cols));
+    return rcpp_result_gen;
+END_RCPP
+}
 // path
 NumericVector path(int to, NumericMatrix paths);
 RcppExport SEXP _hexmatrix_path(SEXP toSEXP, SEXP pathsSEXP) {
@@ -46,6 +60,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_hexmatrix_whichDir", (DL_FUNC) &_hexmatrix_whichDir, 4},
     {"_hexmatrix_path", (DL_FUNC) &_hexmatrix_path, 2},
     {"_hexmatrix_pathReduce", (DL_FUNC) &_hexmatrix_pathReduce, 4},
     {"_hexmatrix_reachability", (DL_FUNC) &_hexmatrix_reachability, 3},

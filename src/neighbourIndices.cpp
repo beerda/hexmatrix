@@ -22,3 +22,17 @@ int neigh(int dir, int i, int rows, int cols)
 
   return otherX + otherY * rows;
 }
+
+
+// [[Rcpp::export(name=".whichDir")]]
+int whichDir(int cur, int other, int rows, int cols)
+{
+  int dir = 5;
+  while (dir >= 0) {
+    if (neigh(dir, cur, rows, cols) == other)
+      break;
+    dir--;
+  }
+
+  return dir;
+}

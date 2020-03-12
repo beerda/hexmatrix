@@ -44,11 +44,7 @@ RObject pathReduceInternal(const int i, PathReduceContext& ctx) {
   ctx.cache[i] = naVec; // avoid infinite loop in cyclic paths
 
   if (next >= 0 && next <= ctx.rowcols) {
-    int dir = 0;
-    for (; dir < 6; ++dir) {
-      if (neigh(dir, i, ctx.rows, ctx.cols) == next)
-        break;
-    }
+    int dir = whichDir(i, next, ctx.rows, ctx.cols);
     RObject res = pathReduceInternal(next, ctx);
     ctx.cache[i] = ctx.f(ctx.data[i + ctx.rowcols * dir], res);
   }
