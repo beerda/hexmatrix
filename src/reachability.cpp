@@ -18,7 +18,7 @@ bool operator<(const Vertex& v1, const Vertex& v2) {
 
 
 // [[Rcpp::export(name=".reachability")]]
-List reachability(const NumericMatrix m, const NumericVector dist) {
+List reachability(const NumericMatrix m, const NumericVector dist, int target) {
   int rows = m.nrow();
   int cols = m.ncol();
   int rowcols = rows * cols;
@@ -26,6 +26,7 @@ List reachability(const NumericMatrix m, const NumericVector dist) {
   NumericMatrix pathMatrix = NumericMatrix(rows, cols); // zero-filled
   NumericVector init = NumericVector();
   std::priority_queue<Vertex> queue;
+  target--;
 
   // init
   for (int i = 0; i < rowcols; ++i) {
@@ -43,6 +44,9 @@ List reachability(const NumericMatrix m, const NumericVector dist) {
   while (!queue.empty()) {
     Vertex cur = queue.top();
     queue.pop();
+
+    if (cur.i == target)
+      break; // path to target found
 
     for (int dir = 0; dir < 6; ++dir) {
       int other = neigh(dir, cur.i, rows, cols);

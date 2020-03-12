@@ -32,14 +32,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // reachability
-List reachability(const NumericMatrix m, const NumericVector dist);
-RcppExport SEXP _hexmatrix_reachability(SEXP mSEXP, SEXP distSEXP) {
+List reachability(const NumericMatrix m, const NumericVector dist, int target);
+RcppExport SEXP _hexmatrix_reachability(SEXP mSEXP, SEXP distSEXP, SEXP targetSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const NumericMatrix >::type m(mSEXP);
     Rcpp::traits::input_parameter< const NumericVector >::type dist(distSEXP);
-    rcpp_result_gen = Rcpp::wrap(reachability(m, dist));
+    Rcpp::traits::input_parameter< int >::type target(targetSEXP);
+    rcpp_result_gen = Rcpp::wrap(reachability(m, dist, target));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -47,7 +48,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_hexmatrix_path", (DL_FUNC) &_hexmatrix_path, 2},
     {"_hexmatrix_pathReduce", (DL_FUNC) &_hexmatrix_pathReduce, 4},
-    {"_hexmatrix_reachability", (DL_FUNC) &_hexmatrix_reachability, 2},
+    {"_hexmatrix_reachability", (DL_FUNC) &_hexmatrix_reachability, 3},
     {NULL, NULL, 0}
 };
 

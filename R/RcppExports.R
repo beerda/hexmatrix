@@ -9,7 +9,7 @@
     .Call(`_hexmatrix_pathReduce`, data, path, origin, f)
 }
 
-.reachability <- function(m, dist) {
-    .Call(`_hexmatrix_reachability`, m, dist)
+.reachability <- function(m, dist, target) {
+    .Call(`_hexmatrix_reachability`, m, dist, target)
 }
 
