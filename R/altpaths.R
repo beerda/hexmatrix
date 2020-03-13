@@ -1,8 +1,32 @@
+.forbidden <- function(dist, path, dilat) {
+  d <- dim(dist)
+  mask <- matrix(FALSE, nrow=d[1], ncol=d[2])
+
+  if (length(path) <= 2 * dilat) {
+    mask[path] <- TRUE
+  } else {
+    i <- seq_len(dilat)
+    path <- path[c(-i, -1 * (length(path) - i + 1))]
+    mask[path] <- TRUE
+    for (i in seq_len(dilat)) {
+      mask <- morph(mask, dilate=TRUE, na.rm=TRUE)
+    }
+  }
+
+  mask <- rep(mask, 6)
+  dist[mask] <- dist[mask] * 100
+  dist
+}
+
+
 #' @export
 altpaths <- function(m,
                      target,
                      n=1,
-                     dist=1) {
+                     priceThresh=1.5,
+                     dist=1,
+                     step=1,
+                     dilat=1) {
   assert_that(is.matrix(m))
   assert_that(is.numeric(m))
   rows <- nrow(m)
@@ -27,41 +51,55 @@ altpaths <- function(m,
 
   rowcol <- rows * cols;
   mNA <- like(m, data=NA_real_)
-  res <- list()
+  resPath <- list()
+  resPrices <- list()
   bPaths <- list()
-  bPrices <- c()
+  bPrices <- list()
+  bPricesAll <- c()
   cheapest <- reachability(m, dist, target)
-  res[[1]] <- rev(path(target, cheapest$paths)[[1]])
+  resPath[[1]] <- rev(path(target, cheapest$paths)[[1]])
+  resPrices[[1]] <- cheapest$prices[resPath[[1]]]
+  priceThreshold <- priceThresh * cheapest$prices[target]
 
   for (k in seq_len(n - 1)) {
-    currentPath <- res[[k]]
+    currentPath <- resPath[[k]]
+    currentPrices <- resPrices[[k]]
 
-    for (i in seq_len(length(currentPath) - 1)) {
-      spurNode <- currentPath[i]
-      rootIndices <- seq_len(i)
-      rootPath <- currentPath[rootIndices]
+    to <- length(currentPath) - step - 1
+    if (to >= 1) {
+      for (i in seq(from=1, to=to, by=step)) {
+        spurNode <- currentPath[i]
+        rootIndices <- seq_len(i)
+        rootPath <- currentPath[rootIndices]
+        rootPrices <- currentPrices[rootIndices]
 
-      modDist <- dist
-      for (j in seq_along(res)) {
-        otherPath <- res[[j]]
-        if ((length(otherPath) > i) && all(rootPath == otherPath[rootIndices])) {
-          otherNode <- otherPath[i + 1]
-          dir <- whichDir(otherNode, spurNode, m)
-          modDist[otherNode + rowcol * (dir - 1)] <- NA
+        modDist <- dist
+        for (j in seq_along(resPath)) {
+          otherPath <- resPath[[j]]
+          if ((length(otherPath) > i) && all(rootPath == otherPath[rootIndices])) {
+            forbid <- otherPath[-rootIndices]
+            length(forbid) <- min(length(forbid) - 1, step)
+            modDist <- .forbidden(modDist, forbid, dilat=dilat)
+          }
         }
-      }
-      for (j in seq_len(i - 1)) {
-        modDist[rootPath[j] + rowcol * 0:5] <- NA
-      }
-      modM <- mNA
-      modM[spurNode] <- 0
-      cheapest <- reachability(m=modM, dist=modDist, target=target)
-      spurPath <- rev(path(target, cheapest$paths)[[1]])
-      if (all(!is.na(spurPath))) {
-        totalPath <- c(rootPath, spurPath[-1])
-        if ((length(bPaths) == 0) || (sum(sapply(bPaths, identical, totalPath)) == 0)) { # totalPath is not in bPaths
-          bPaths <- c(bPaths, list(totalPath))
-          bPrices <- c(bPrices, cheapest$prices[target])
+        modDist <- .forbidden(modDist, rootPath[-i], dilat=1)
+
+        modM <- mNA
+        modM[spurNode] <- 0
+
+        cheapest <- reachability(m=modM, dist=modDist, target=target)
+        spurPath <- rev(path(target, cheapest$paths)[[1]])
+        if (all(!is.na(spurPath))) {
+          totalPath <- c(rootPath, spurPath[-1])
+          totalPrices <-  c(rootPrices, rootPrices[length(rootPrices)] + cheapest$prices[spurPath[-1]])
+          finalPrice <- totalPrices[length(totalPrices)]
+          if (finalPrice < priceThreshold) {
+            if ((length(bPaths) == 0) || (sum(sapply(bPaths, identical, totalPath)) == 0)) { # totalPath is not in bPaths
+              bPaths <- c(bPaths, list(totalPath))
+              bPrices <- c(bPrices, list(totalPrices))
+              bPricesAll <- c(bPricesAll, finalPrice)
+            }
+          }
         }
       }
     }
@@ -70,12 +108,14 @@ altpaths <- function(m,
       break;
     }
 
-    o <- order(bPrices, decreasing=TRUE)
+    o <- order(bPricesAll, decreasing=TRUE)
     bestIndex <- o[length(o)]
-    res[[k + 1]] <- bPaths[[bestIndex]]
+    resPath[[k + 1]] <- bPaths[[bestIndex]]
+    resPrices[[k + 1]] <- bPrices[[bestIndex]]
     bPrices <- bPrices[o][-length(o)]
+    bPricesAll <- bPricesAll[o][-length(o)]
     bPaths <- bPaths[o][-length(o)]
   }
 
-  res
+  resPath
 }
