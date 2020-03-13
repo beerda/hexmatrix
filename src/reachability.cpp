@@ -14,7 +14,11 @@ public:
   Vertex(int ai, double aPrice) : i(ai), price(aPrice)  { }
 };
 
+
 bool operator<(const Vertex& v1, const Vertex& v2) {
+  if (v1.price == v2.price)
+    return v1.i < v2.i; // to behave in the same way on all platforms
+
   return v1.price > v2.price;
 }
 

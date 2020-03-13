@@ -7,7 +7,7 @@ test_that("reachability (dist is number)", {
   expect_equal(res$prices,
                matrix(c(1,1,1,2, 1,0,1,2, 2,1,2,2), nrow=4, ncol=3, byrow=FALSE))
   expect_equal(res$paths,
-               matrix(c(6, 6, 6, 3, 6, 0, 6, 3, 10, 6, 10, 7),
+               matrix(c(6, 6, 6, 3, 6, 0, 6, 7, 10, 6, 10, 7),
                       nrow=4, ncol=3, byrow=FALSE))
 
   res <- reachability(m, dist=2)
@@ -15,7 +15,7 @@ test_that("reachability (dist is number)", {
   expect_equal(res$prices,
                matrix(2 * c(1,1,1,2, 1,0,1,2, 2,1,2,2), nrow=4, ncol=3, byrow=FALSE))
   expect_equal(res$paths,
-               matrix(c(6, 6, 6, 3, 6, 0, 6, 3, 10, 6, 10, 7),
+               matrix(c(6, 6, 6, 3, 6, 0, 6, 7, 10, 6, 10, 7),
                       nrow=4, ncol=3, byrow=FALSE))
 })
 
@@ -47,7 +47,7 @@ test_that("reachability (dist is array)", {
   expect_equal(res$prices,
                matrix(c(1,1,2,3, 1,0,1,2, 2,1,2,2), nrow=4, ncol=3, byrow=FALSE))
   expect_equal(res$paths,
-               matrix(c(6, 6, 6, 3, 6, 0, 6, 7, 10, 6, 10, 7),
+               matrix(c(6, 6, 6, 8, 6, 0, 6, 7, 10, 6, 10, 7),
                       nrow=4, ncol=3, byrow=FALSE))
 
   d[4, 1, 2] <- 2
@@ -65,7 +65,7 @@ test_that("reachability (dist is array)", {
   expect_equal(res$prices,
                matrix(c(1,1,2,4, 1,0,1,2, 2,1,2,2), nrow=4, ncol=3, byrow=FALSE))
   expect_equal(res$paths,
-               matrix(c(6, 6, 6, 3, 6, 0, 6, 7, 10, 6, 10, 7),
+               matrix(c(6, 6, 6, 8, 6, 0, 6, 7, 10, 6, 10, 7),
                       nrow=4, ncol=3, byrow=FALSE))
 })
 
@@ -91,7 +91,7 @@ test_that("reachability to a specific target", {
 
   expectedPrices <- matrix(c(1,1,2,4, 1, 0, 1, 2, 2, 1, 2, 2),
                            nrow=4, ncol=3, byrow=FALSE)
-  expectedPaths <- matrix(c(6, 6, 6, 3, 6, 0, 6, 7, 10, 6, 10, 7),
+  expectedPaths <- matrix(c(6, 6, 6, 8, 6, 0, 6, 7, 10, 6, 10, 7),
                           nrow=4, ncol=3, byrow=FALSE)
 
   for (i in seq_len(length(m))) {
