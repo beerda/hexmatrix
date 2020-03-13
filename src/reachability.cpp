@@ -2,6 +2,8 @@
 #include <queue>
 #include "neighbourIndices.h"
 
+#define IS_FINITE(x) (!NumericVector::is_na(x) && !Rcpp::traits::is_nan<REALSXP>(x) && !Rcpp::traits::is_infinite<REALSXP>(x))
+
 using namespace Rcpp;
 
 
@@ -31,7 +33,7 @@ List reachability(const NumericMatrix m, const NumericVector dist, int target) {
   // init
   for (int i = 0; i < rowcols; ++i) {
     double val = m[i];
-    if (traits::is_finite<REALSXP>(val)) {
+    if (IS_FINITE(val)) {
       init.push_back(i + 1);
       Vertex v = Vertex(i, val);
       queue.push(v);
@@ -52,13 +54,13 @@ List reachability(const NumericMatrix m, const NumericVector dist, int target) {
       int other = neigh(dir, cur.i, rows, cols);
       int oppositeDir = (dir + 3) % 6;
       double edgePrice = dist[other + rowcols * oppositeDir];
-      if (!traits::is_finite<REALSXP>(edgePrice))
+      if (!IS_FINITE(edgePrice))
         continue;
 
       double otherPrice = priceMatrix[other];
       double newPrice = cur.price + edgePrice;
 
-      if ((!traits::is_finite<REALSXP>(otherPrice)) || (otherPrice > newPrice)) {
+      if ((!IS_FINITE(otherPrice)) || (otherPrice > newPrice)) {
         priceMatrix[other] = newPrice;
         pathMatrix[other] = cur.i + 1;
         Vertex v = Vertex(other, newPrice);
