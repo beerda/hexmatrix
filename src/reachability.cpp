@@ -52,6 +52,9 @@ List reachability(const NumericMatrix m, const NumericVector dist, int target) {
 
     for (int dir = 0; dir < 6; ++dir) {
       int other = neigh(dir, cur.i, rows, cols);
+      if (other < 0)
+        continue;
+
       int oppositeDir = (dir + 3) % 6;
       double edgePrice = dist[other + rowcols * oppositeDir];
       if (!IS_FINITE(edgePrice))
