@@ -1,4 +1,4 @@
-test_that("shortest", {
+test_that("shortest (generic test)", {
   d <- array(1, dim=c(4, 3, 6))
   d[3, 1, 2] <- 2
   d[4, 1, 2] <- 2
@@ -15,4 +15,31 @@ test_that("shortest", {
     expect_equal(res$prices, rev(expectedPrices[p]))
     expect_equal(res$path, rev(p))
   }
+})
+
+
+test_that("shortest (simple path)", {
+  d <- matrix(1, nrow=4, ncol=3)
+  d[4, ] <- 10
+  d[1, 3] <- 10
+  d[2, 2] <- 10
+  d[3, c(1, 3)] <- 10
+
+  res <- shortest(7, 2, d)
+  expect_equal(res$path, c(7, 10, 5, 1, 2))
+  expect_equal(res$prices, c(0, 1, 2, 3, 4))
+
+  d[2, 3] <- NA
+  res <- shortest(7, 2, d)
+  expect_equal(res$path, c(7, 6, 2))
+  expect_equal(res$prices, c(0, 10, 11))
+})
+
+
+test_that("shortest (nonexistent path)", {
+  d <- matrix(NA, nrow=4, ncol=3)
+  d[1, ] <- 1
+
+  res <- shortest(1, 11, d)
+  expect_equal(res, NULL)
 })

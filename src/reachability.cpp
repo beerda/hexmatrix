@@ -116,6 +116,8 @@ List shortest(int source, int target, const NumericVector dist) {
   NumericVector paths;
   int cur = target;
   do {
+    if (NumericVector::is_na(pathMatrix[cur]))
+      return List::create();
     paths.push_back(cur);
     prices.push_back(priceMatrix[cur]);
     cur = pathMatrix[cur];

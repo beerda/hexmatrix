@@ -16,8 +16,12 @@ shortest <- function(source,
   assert_that(target >= 1 && target <= length(dist))
 
   res <- .Call('_hexmatrix_shortest', PACKAGE = 'hexmatrix', source - 1, target - 1, dist)
-  res$prices <- rev(res$prices)
-  res$path <- rev(res$path) + 1
+  if (length(res) == 0) {
+    res <- NULL
+  } else {
+    res$prices <- rev(res$prices)
+    res$path <- rev(res$path) + 1
+  }
 
   res
 }
