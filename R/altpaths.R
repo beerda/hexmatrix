@@ -119,3 +119,38 @@ altpaths <- function(m,
 
   resPath
 }
+
+
+#' @export
+altpaths2 <- function(source,
+                      target,
+                      dist,
+                      n=1,
+                      step=1,
+                      dilat=1) {
+  if (is.matrix(dist)) {
+    dist <- array(dist, dim=c(nrow(dist), ncol(dist), 6))
+  }
+  assert_that(is.array(dist))
+
+  assert_that(is.scalar(source))
+  assert_that(is.numeric(source))
+  assert_that(source >= 1 && source <= length(dist))
+
+  assert_that(is.scalar(target))
+  assert_that(is.numeric(target))
+  assert_that(target >= 1 && target <= length(dist))
+
+  assert_that(is.scalar(n) && is.numeric(n))
+  assert_that(is.scalar(step) && is.numeric(step))
+  assert_that(is.scalar(dilat) && is.numeric(dilat))
+
+  res <- .Call('_hexmatrix_altpaths', PACKAGE = 'hexmatrix',
+               source - 1, target - 1, dist, n, step, dilat)
+  res <- lapply(res, function(r) {
+    r$path <- r$path + 1
+    r
+  })
+
+  res
+}

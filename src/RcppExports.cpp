@@ -5,6 +5,22 @@
 
 using namespace Rcpp;
 
+// altpaths
+List altpaths(int source, int target, const NumericVector dist, int n, int step, int dilat);
+RcppExport SEXP _hexmatrix_altpaths(SEXP sourceSEXP, SEXP targetSEXP, SEXP distSEXP, SEXP nSEXP, SEXP stepSEXP, SEXP dilatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type source(sourceSEXP);
+    Rcpp::traits::input_parameter< int >::type target(targetSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type dist(distSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type step(stepSEXP);
+    Rcpp::traits::input_parameter< int >::type dilat(dilatSEXP);
+    rcpp_result_gen = Rcpp::wrap(altpaths(source, target, dist, n, step, dilat));
+    return rcpp_result_gen;
+END_RCPP
+}
 // whichDir
 int whichDir(int cur, int other, int rows, int cols);
 RcppExport SEXP _hexmatrix_whichDir(SEXP curSEXP, SEXP otherSEXP, SEXP rowsSEXP, SEXP colsSEXP) {
@@ -73,6 +89,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_hexmatrix_altpaths", (DL_FUNC) &_hexmatrix_altpaths, 6},
     {"_hexmatrix_whichDir", (DL_FUNC) &_hexmatrix_whichDir, 4},
     {"_hexmatrix_path", (DL_FUNC) &_hexmatrix_path, 2},
     {"_hexmatrix_pathReduce", (DL_FUNC) &_hexmatrix_pathReduce, 4},
