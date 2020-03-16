@@ -21,8 +21,12 @@ reachability <- function(m,
     assert_that(is.scalar(target))
     assert_that(target >= 1 && target <= length(m))
   } else {
-    target <- 0   # search cheapest paths to all cells
+    target <- -1   # search cheapest paths to all cells
   }
 
-  .Call('_hexmatrix_reachability', PACKAGE = 'hexmatrix', m, dist, target)
+  res <- .Call('_hexmatrix_reachability', PACKAGE = 'hexmatrix', m, dist, target - 1)
+  res$paths <- res$paths + 1
+  res$init <- res$init + 1
+
+  res
 }

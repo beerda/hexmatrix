@@ -58,12 +58,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// shortest
+List shortest(int source, int target, const NumericVector dist);
+RcppExport SEXP _hexmatrix_shortest(SEXP sourceSEXP, SEXP targetSEXP, SEXP distSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type source(sourceSEXP);
+    Rcpp::traits::input_parameter< int >::type target(targetSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type dist(distSEXP);
+    rcpp_result_gen = Rcpp::wrap(shortest(source, target, dist));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_hexmatrix_whichDir", (DL_FUNC) &_hexmatrix_whichDir, 4},
     {"_hexmatrix_path", (DL_FUNC) &_hexmatrix_path, 2},
     {"_hexmatrix_pathReduce", (DL_FUNC) &_hexmatrix_pathReduce, 4},
     {"_hexmatrix_reachability", (DL_FUNC) &_hexmatrix_reachability, 3},
+    {"_hexmatrix_shortest", (DL_FUNC) &_hexmatrix_shortest, 3},
     {NULL, NULL, 0}
 };
 

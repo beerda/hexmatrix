@@ -17,3 +17,7 @@
     .Call(`_hexmatrix_reachability`, m, dist, target)
 }
 
+.shortest <- function(source, target, dist) {
+    .Call(`_hexmatrix_shortest`, source, target, dist)
+}
+
