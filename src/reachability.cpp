@@ -123,5 +123,8 @@ List shortest(int source, int target, const NumericVector dist) {
     cur = pathMatrix[cur];
   } while (cur >= 0);
 
+  std::reverse(paths.begin(), paths.end());
+  std::reverse(prices.begin(), prices.end());
+
   return List::create(_["prices"] = prices, _["path"] = paths);
 }

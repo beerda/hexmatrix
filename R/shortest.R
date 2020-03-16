@@ -19,8 +19,7 @@ shortest <- function(source,
   if (length(res) == 0) {
     res <- NULL
   } else {
-    res$prices <- rev(res$prices)
-    res$path <- rev(res$path) + 1
+    res$path <- res$path + 1
   }
 
   res
