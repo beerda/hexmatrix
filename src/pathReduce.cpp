@@ -1,8 +1,4 @@
-#include <Rcpp.h>
-#include "neighbourIndices.h"
-
-
-using namespace Rcpp;
+#include "hexmatrix.h"
 
 
 class PathReduceContext {

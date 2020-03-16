@@ -1,10 +1,6 @@
-#include <Rcpp.h>
 #include <queue>
-#include "neighbourIndices.h"
+#include "hexmatrix.h"
 
-#define IS_FINITE(x) (!NumericVector::is_na(x) && !Rcpp::traits::is_nan<REALSXP>(x) && !Rcpp::traits::is_infinite<REALSXP>(x))
-
-using namespace Rcpp;
 
 
 class Vertex {

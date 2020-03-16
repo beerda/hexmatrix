@@ -1,7 +1,4 @@
-#include <Rcpp.h>
-
-
-using namespace Rcpp;
+#include "hexmatrix.h"
 
 
 // [[Rcpp::export(name=".path")]]
