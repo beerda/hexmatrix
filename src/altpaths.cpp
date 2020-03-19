@@ -133,6 +133,7 @@ List altpaths(int source, int target, const NumericVector dist, const NumericMat
   }
   Path best = Path(sh);
   res.push_back(best);
+  double priceThreshold = best.price + log(best.price);
 
   // main loop
   for (int i = 0; i < n; ++i) {
@@ -146,10 +147,11 @@ List altpaths(int source, int target, const NumericVector dist, const NumericMat
           modDist.disableAfter(res[j], spurIndex);
         }
       }
-      modDist.disableRoot(best, spurIndex);
-      sh = shortest(spurNode, target, modDist.dist);
+      //modDist.disableRoot(best, spurIndex);
+      sh = shortest(source, target, modDist.dist);
       if (sh.length()) { // path found
-        Path foundPath = Path(best, spurIndex, sh);
+        //Path foundPath = Path(best, spurIndex, sh);
+        Path foundPath = Path(sh);
         candidates.push(foundPath);
       }
     }
@@ -168,7 +170,7 @@ List altpaths(int source, int target, const NumericVector dist, const NumericMat
         }
       }
 
-      if (!equal) {
+      if (!equal && best.price < priceThreshold) {
         res.push_back(best);
         pushed = true;
         break;
