@@ -87,6 +87,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// region
+NumericVector region(const NumericMatrix m, int index);
+RcppExport SEXP _hexmatrix_region(SEXP mSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericMatrix >::type m(mSEXP);
+    Rcpp::traits::input_parameter< int >::type index(indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(region(m, index));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_hexmatrix_altpaths", (DL_FUNC) &_hexmatrix_altpaths, 6},
@@ -95,6 +107,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hexmatrix_pathReduce", (DL_FUNC) &_hexmatrix_pathReduce, 4},
     {"_hexmatrix_reachability", (DL_FUNC) &_hexmatrix_reachability, 3},
     {"_hexmatrix_shortest", (DL_FUNC) &_hexmatrix_shortest, 3},
+    {"_hexmatrix_region", (DL_FUNC) &_hexmatrix_region, 2},
     {NULL, NULL, 0}
 };
 

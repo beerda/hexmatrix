@@ -25,3 +25,7 @@
     .Call(`_hexmatrix_shortest`, source, target, dist)
 }
 
+.region <- function(m, index) {
+    .Call(`_hexmatrix_region`, m, index)
+}
+
