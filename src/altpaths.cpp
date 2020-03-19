@@ -41,10 +41,10 @@ public:
 
 
   bool equalTo(Path other) {
-    if (path.length() != other.path.length()) {
+    if (price != other.price) {
       return false;
     }
-    if (price != other.price) {
+    if (path.length() != other.path.length()) {
       return false;
     }
     for (int i = 0; i < path.length(); ++i) {
@@ -58,7 +58,7 @@ public:
   bool commonPrefix(Path other, int spurIndex) {
     if (spurIndex >= path.length() || spurIndex >= other.path.length())
       return false;
-    for (int i = 0; i <= spurIndex; ++i) {
+    for (int i = spurIndex; i >= 0; --i) {
       if (path[i] != other.path[i])
         return false;
     }
@@ -77,21 +77,17 @@ public:
   NumericVector dist;
   NumericMatrix regions;
   int step;
-  int dilat;
   int rows;
   int cols;
   int rowcols;
-  int offset;
 
-  Distance(const NumericVector aDist, const NumericMatrix aRegions, int aStep, int aDilat) :
+  Distance(const NumericVector aDist, const NumericMatrix aRegions, int aStep) :
     dist(clone(aDist)),
     regions(aRegions),
     step(aStep),
-    dilat(aDilat),
     rows(0),
     cols(0),
-    rowcols(0),
-    offset(aDilat)
+    rowcols(0)
   {
     NumericVector dim = aDist.attr("dim");
     rows = dim[0];
@@ -100,48 +96,26 @@ public:
   }
 
   void disableAfter(Path p, int spurIndex) {
-    //if (p.path.length() > spurIndex + 1) {
-      //double reg = regions[p.path[spurIndex + 1]];
-      for (int i = spurIndex + 1; i < p.path.length(); ++i) {
-        if (i > spurIndex + step + 1)
-          break;
-        //if (regions[p.path[i]] != reg)
-          //break;
-        disableNode(p.path[i], dilat, 100);
-      }
-    //}
+    int start = step * ((spurIndex + 1) / step + 1);
+    for (int i = start; i < p.path.length() && i < start + step; ++i) {
+      disableNode(p.path[i]);
+    }
   }
 
   void disableRoot(Path p, int spurIndex) {
-    for (int i = 0; i < spurIndex - offset; ++i) {
-      disableNode(p.path[i], 0, 100);
+    for (int i = 0; i < spurIndex - step; ++i) {
+      disableNode(p.path[i]);
     }
   }
 
 private:
-  void disableNode(int node, int curDilat, double amount) {
-    /*
-    if (curDilat <= 0) {
-      for (int i = 0; i < 6; ++i) {
-        int index = node + i * rowcols;
-        dist[index] = dist[index] * amount;
-      }
-    } else {
-      disableNode(node, 0, amount);
-      for (int d = 0; d < 6; ++d) {
-        int n = neigh(d, node, rows, cols);
-        if (n >= 0) {
-          disableNode(n, curDilat - 1, amount);
-        }
-      }
-    }
-    */
-
+  void disableNode(int node) {
     NumericVector reg = region(regions, node);
     for (int j = 0; j < reg.length(); ++j) {
       for (int i = 0; i < 6; ++i) {
         int index = reg[j] + i * rowcols;
-        dist[index] = dist[index] * amount;
+        //dist[index] = dist[index] * 100000;
+        dist[index] = 1e9;
       }
     }
   }
@@ -166,7 +140,7 @@ List altpaths(int source, int target, const NumericVector dist, const NumericMat
 
     for (int spurIndex = 0; spurIndex < best.path.length() - step - 1; spurIndex += step) {
       int spurNode = best.path[spurIndex];
-      Distance modDist = Distance(dist, regions, step, dilat);
+      Distance modDist = Distance(dist, regions, step);
       for (int j = 0; j < res.size(); ++j) {
         if (best.commonPrefix(res[j], spurIndex)) {
           modDist.disableAfter(res[j], spurIndex);
