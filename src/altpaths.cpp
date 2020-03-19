@@ -40,6 +40,21 @@ public:
   }
 
 
+  bool equalTo(Path other) {
+    if (path.length() != other.path.length()) {
+      return false;
+    }
+    if (price != other.price) {
+      return false;
+    }
+    for (int i = 0; i < path.length(); ++i) {
+      if (path[i] != other.path[i])
+        return false;
+    }
+    return true;
+  }
+
+
   bool commonPrefix(Path other, int spurIndex) {
     if (spurIndex >= path.length() || spurIndex >= other.path.length())
       return false;
@@ -60,6 +75,7 @@ bool operator<(const Path& p1, const Path& p2) {
 class Distance {
 public:
   NumericVector dist;
+  NumericMatrix regions;
   int step;
   int dilat;
   int rows;
@@ -67,8 +83,9 @@ public:
   int rowcols;
   int offset;
 
-  Distance(const NumericVector aDist, int aStep, int aDilat) :
+  Distance(const NumericVector aDist, const NumericMatrix aRegions, int aStep, int aDilat) :
     dist(clone(aDist)),
+    regions(aRegions),
     step(aStep),
     dilat(aDilat),
     rows(0),
@@ -83,18 +100,16 @@ public:
   }
 
   void disableAfter(Path p, int spurIndex) {
-    //if (p.path.length() > spurIndex + step + offset) {
-      //for (int i = 1; i <= step; ++i) {
-        //disableNode(p.path[spurIndex + i + offset]);
-      //}
+    //if (p.path.length() > spurIndex + 1) {
+      //double reg = regions[p.path[spurIndex + 1]];
+      for (int i = spurIndex + 1; i < p.path.length(); ++i) {
+        if (i > spurIndex + step + 1)
+          break;
+        //if (regions[p.path[i]] != reg)
+          //break;
+        disableNode(p.path[i], dilat, 100);
+      }
     //}
-    int from = spurIndex + offset;
-    int to = p.path.length() - offset;
-    double amountDiff = 99 / (to - from);
-    for (int i = from; i < to; ++i) {
-      //disableNode(p.path[i], dilat, (i - from) * amountDiff + 1);
-      disableNode(p.path[i], dilat, 100);
-    }
   }
 
   void disableRoot(Path p, int spurIndex) {
@@ -105,6 +120,7 @@ public:
 
 private:
   void disableNode(int node, int curDilat, double amount) {
+    /*
     if (curDilat <= 0) {
       for (int i = 0; i < 6; ++i) {
         int index = node + i * rowcols;
@@ -114,7 +130,18 @@ private:
       disableNode(node, 0, amount);
       for (int d = 0; d < 6; ++d) {
         int n = neigh(d, node, rows, cols);
-        disableNode(n, curDilat - 1, amount);
+        if (n >= 0) {
+          disableNode(n, curDilat - 1, amount);
+        }
+      }
+    }
+    */
+
+    NumericVector reg = region(regions, node);
+    for (int j = 0; j < reg.length(); ++j) {
+      for (int i = 0; i < 6; ++i) {
+        int index = reg[j] + i * rowcols;
+        dist[index] = dist[index] * amount;
       }
     }
   }
@@ -122,7 +149,7 @@ private:
 
 
 // [[Rcpp::export(name=".altpaths")]]
-List altpaths(int source, int target, const NumericVector dist, int n, int step, int dilat) {
+List altpaths(int source, int target, const NumericVector dist, const NumericMatrix regions, int n, int step, int dilat) {
   std::vector<Path> res;
   std::priority_queue<Path> candidates;
 
@@ -139,7 +166,7 @@ List altpaths(int source, int target, const NumericVector dist, int n, int step,
 
     for (int spurIndex = 0; spurIndex < best.path.length() - step - 1; spurIndex += step) {
       int spurNode = best.path[spurIndex];
-      Distance modDist = Distance(dist, step, dilat);
+      Distance modDist = Distance(dist, regions, step, dilat);
       for (int j = 0; j < res.size(); ++j) {
         if (best.commonPrefix(res[j], spurIndex)) {
           modDist.disableAfter(res[j], spurIndex);
@@ -153,11 +180,29 @@ List altpaths(int source, int target, const NumericVector dist, int n, int step,
       }
     }
 
-    if (candidates.empty())
+
+    bool pushed = false;
+    while (!candidates.empty()) {
+      Path best = candidates.top();
+      candidates.pop();
+
+      bool equal = false;
+      for (int i = 0; i < res.size(); ++i) {
+        if (best.equalTo(res[i])) {
+          equal = true;
+          break;
+        }
+      }
+
+      if (!equal) {
+        res.push_back(best);
+        pushed = true;
+        break;
+      }
+    }
+
+    if (!pushed)
       break;
-    Path best = candidates.top();
-    candidates.pop();
-    res.push_back(best);
   }
 
   // gather results

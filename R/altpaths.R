@@ -125,6 +125,7 @@ altpaths <- function(m,
 altpaths2 <- function(source,
                       target,
                       dist,
+                      regions,
                       n=1,
                       step=1,
                       dilat=1) {
@@ -146,7 +147,7 @@ altpaths2 <- function(source,
   assert_that(is.scalar(dilat) && is.numeric(dilat))
 
   res <- .Call('_hexmatrix_altpaths', PACKAGE = 'hexmatrix',
-               source - 1, target - 1, dist, n, step, dilat)
+               source - 1, target - 1, dist, regions, n, step, dilat)
   res <- lapply(res, function(r) {
     r$path <- r$path + 1
     r

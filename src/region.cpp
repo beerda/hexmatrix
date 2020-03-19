@@ -3,7 +3,7 @@
 
 void regionInternal(int index, double val, NumericMatrix &hist, NumericVector &res) {
   if (hist[index] == val) {
-    res.push_back(index + 1);
+    res.push_back(index);
     hist[index] = val - 1;
 
     for (int dir = 0; dir < 6; ++dir) {
@@ -20,7 +20,6 @@ void regionInternal(int index, double val, NumericMatrix &hist, NumericVector &r
 NumericVector region(const NumericMatrix m, int index) {
   NumericVector res = NumericVector();
   NumericMatrix hist = clone(m);
-  index--;
   regionInternal(index, m[index], hist, res);
   return res;
 }
