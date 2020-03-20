@@ -6,8 +6,8 @@
 using namespace Rcpp;
 
 // altpaths
-List altpaths(int source, int target, const NumericVector dist, const NumericMatrix regions, int n, int step, int dilat);
-RcppExport SEXP _hexmatrix_altpaths(SEXP sourceSEXP, SEXP targetSEXP, SEXP distSEXP, SEXP regionsSEXP, SEXP nSEXP, SEXP stepSEXP, SEXP dilatSEXP) {
+List altpaths(int source, int target, const NumericVector dist, const NumericMatrix regions, int n, int step, const Function f);
+RcppExport SEXP _hexmatrix_altpaths(SEXP sourceSEXP, SEXP targetSEXP, SEXP distSEXP, SEXP regionsSEXP, SEXP nSEXP, SEXP stepSEXP, SEXP fSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -17,8 +17,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const NumericMatrix >::type regions(regionsSEXP);
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< int >::type step(stepSEXP);
-    Rcpp::traits::input_parameter< int >::type dilat(dilatSEXP);
-    rcpp_result_gen = Rcpp::wrap(altpaths(source, target, dist, regions, n, step, dilat));
+    Rcpp::traits::input_parameter< const Function >::type f(fSEXP);
+    rcpp_result_gen = Rcpp::wrap(altpaths(source, target, dist, regions, n, step, f));
     return rcpp_result_gen;
 END_RCPP
 }

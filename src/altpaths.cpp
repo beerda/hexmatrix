@@ -21,25 +21,6 @@ public:
   { }
 
 
-  Path(Path rootPath, int spurIndex, List l) :
-    path(), prices(), price(0)
-  {
-    NumericVector otherPath = l("path");
-    NumericVector otherPrices = l("prices");
-
-    for (int i = 0; i <= spurIndex; ++i) {
-      prices.push_back(rootPath.prices[i]);
-      path.push_back(rootPath.path[i]);
-    }
-    price = rootPath.prices[spurIndex];
-    for (int i = 0; i < otherPath.size(); ++i) {
-      price += otherPrices[i];
-      prices.push_back(price);
-      path.push_back(otherPath[i]);
-    }
-  }
-
-
   bool equalTo(Path other) {
     if (price != other.price) {
       return false;
@@ -98,23 +79,22 @@ public:
   void disableAfter(Path p, int spurIndex) {
     int start = step * ((spurIndex + 1) / step + 1);
     for (int i = start; i < p.path.length() && i < start + step; ++i) {
-      disableNode(p.path[i]);
+      disableRegion(p.path[i]);
     }
   }
 
   void disableRoot(Path p, int spurIndex) {
     for (int i = 0; i < spurIndex - step; ++i) {
-      disableNode(p.path[i]);
+      disableRegion(p.path[i]);
     }
   }
 
 private:
-  void disableNode(int node) {
+  void disableRegion(int node) {
     NumericVector reg = region(regions, node);
     for (int j = 0; j < reg.length(); ++j) {
       for (int i = 0; i < 6; ++i) {
         int index = reg[j] + i * rowcols;
-        //dist[index] = dist[index] * 100000;
         dist[index] = 1e9;
       }
     }
@@ -123,7 +103,8 @@ private:
 
 
 // [[Rcpp::export(name=".altpaths")]]
-List altpaths(int source, int target, const NumericVector dist, const NumericMatrix regions, int n, int step, int dilat) {
+List altpaths(int source, int target, const NumericVector dist, const NumericMatrix regions,
+              int n, int step, const Function f) {
   std::vector<Path> res;
   std::priority_queue<Path> candidates;
 
@@ -133,7 +114,8 @@ List altpaths(int source, int target, const NumericVector dist, const NumericMat
   }
   Path best = Path(sh);
   res.push_back(best);
-  double priceThreshold = best.price + log(best.price);
+  RObject robj = f(best.price);
+  double priceThreshold = as<double>(robj);
 
   // main loop
   for (int i = 0; i < n; ++i) {
