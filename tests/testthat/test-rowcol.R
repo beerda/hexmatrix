@@ -1,6 +1,9 @@
 test_that("rowcol", {
   m <- matrix(1:12, nrow=4, ncol=3, byrow=FALSE)
   expect_equal(rowcol(m), long(m))
+
+  m <- matrix(c(1:11, NA), nrow=4, ncol=3, byrow=FALSE)
+  expect_equal(rowcol(m), long(m))
 })
 
 

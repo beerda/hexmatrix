@@ -2,10 +2,13 @@
 rowcol <- function(m) {
   n <- deparse(substitute(m))
   assert_that(is.matrix(m))
-  res <- which(m==m, arr.ind=TRUE, useNames=FALSE)
-  res <- as.data.frame(res)
-  res <- cbind(res, as.vector(m))
-  colnames(res) <- c('row', 'col', n)
+
+  rows <- nrow(m)
+  cols <- ncol(m)
+  res <- data.frame(row=rep(seq_len(rows), times=cols),
+                    col=rep(seq_len(cols), each=rows),
+                    n=as.vector(m))
+  colnames(res)[3] <- n
   res
 }
 
