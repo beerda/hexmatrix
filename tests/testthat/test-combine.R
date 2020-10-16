@@ -1,4 +1,12 @@
 test_that("combine lists", {
+  expect_equal(combine(list(),
+                       list()),
+               list())
+
+  expect_equal(combine(list(1, 2, 3),
+                       list(2, 4, 6), f=`-`),
+               list(-1, -2, -3))
+
   expect_equal(combine(list(1, 2, 3),
                        list(2, 4, 6)),
                list(3, 6, 9))
