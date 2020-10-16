@@ -5,17 +5,24 @@ class PathReduceContext {
 public:
   RObject* cache;
   List data;
-  NumericMatrix path;
+  NumericVector path;
   RObject origin;
   Function f;
   int rows;
   int cols;
-  int rowcols;
+  int layers;
+  int length;
 
-  PathReduceContext(List aData, NumericMatrix aPath, RObject aOrigin, Function aF) :
-    cache(NULL), data(aData), path(aPath), origin(aOrigin), f(aF),
-    rows(aPath.nrow()), cols(aPath.ncol()), rowcols(aPath.nrow() * aPath.ncol())
-  { cache = new RObject[rowcols]; }
+  PathReduceContext(List aData, NumericVector aPath, RObject aOrigin, Function aF) :
+    cache(NULL), data(aData), path(aPath), origin(aOrigin), f(aF)
+  {
+    NumericVector dim = aPath.attr("dim");
+    rows = dim[0];
+    cols = dim[1];
+    layers = dim[2];
+    length = rows * cols * layers;
+    cache = new RObject[length];
+  }
 
   ~PathReduceContext()
   { delete[] cache; }
@@ -39,10 +46,10 @@ RObject pathReduceInternal(const int i, PathReduceContext& ctx) {
   next--; // switch to C-like indexing
   ctx.cache[i] = naVec; // avoid infinite loop in cyclic paths
 
-  if (next >= 0 && next <= ctx.rowcols) {
-    int dir = whichDir(i, next, ctx.rows, ctx.cols);
+  if (next >= 0 && next <= ctx.length) {
+    int dir = whichDir(i, next, ctx.rows, ctx.cols, ctx.layers);
     RObject res = pathReduceInternal(next, ctx);
-    ctx.cache[i] = ctx.f(ctx.data[i + ctx.rowcols * dir], res);
+    ctx.cache[i] = ctx.f(ctx.data[i + ctx.length * dir], res);
   }
 
   return ctx.cache[i];
@@ -50,11 +57,11 @@ RObject pathReduceInternal(const int i, PathReduceContext& ctx) {
 
 
 // [[Rcpp::export(name=".pathReduce")]]
-List pathReduce(const List data, const NumericMatrix path, const RObject origin, const Function f) {
+List pathReduce(const List data, const NumericVector path, const RObject origin, const Function f) {
   PathReduceContext ctx = PathReduceContext(data, path, origin, f);
-  List result(ctx.rowcols);
+  List result(ctx.length);
 
-  for (int i = 0; i < ctx.rowcols; ++i) {
+  for (int i = 0; i < ctx.length; ++i) {
     result[i] = pathReduceInternal(i, ctx);
   }
 

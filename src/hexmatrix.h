@@ -13,7 +13,7 @@ using namespace Rcpp;
 
 // neighbourIndices.cpp
 extern int neigh(int dir, int i, int rows, int cols);
-extern int whichDir(int cur, int other, int rows, int cols);
+extern int whichDir(int cur, int other, int rows, int cols, int layers);
 
 // reachability.cpp
 extern List shortest(int source, int target, const NumericVector dist);

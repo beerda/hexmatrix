@@ -5,8 +5,8 @@
     .Call(`_hexmatrix_altpaths`, source, target, dist, regions, n, step, f)
 }
 
-.whichDir <- function(cur, other, rows, cols) {
-    .Call(`_hexmatrix_whichDir`, cur, other, rows, cols)
+.whichDir <- function(cur, other, rows, cols, layers) {
+    .Call(`_hexmatrix_whichDir`, cur, other, rows, cols, layers)
 }
 
 .path <- function(to, paths) {
