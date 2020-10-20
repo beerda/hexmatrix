@@ -19,7 +19,7 @@ bool operator<(const Vertex& v1, const Vertex& v2) {
 }
 
 
-void dijkstraLoop(std::priority_queue<Vertex> &queue,
+bool dijkstraLoop(std::priority_queue<Vertex> &queue,
                   NumericMatrix &priceMatrix,
                   NumericMatrix &pathMatrix,
                   const NumericVector &dist,
@@ -27,6 +27,7 @@ void dijkstraLoop(std::priority_queue<Vertex> &queue,
   int rows = priceMatrix.nrow();
   int cols = priceMatrix.ncol();
   int rowcols = rows * cols;
+  bool changed = false;
 
   while (!queue.empty()) {
     Vertex cur = queue.top();
@@ -49,6 +50,7 @@ void dijkstraLoop(std::priority_queue<Vertex> &queue,
       double newPrice = cur.price + edgePrice;
 
       if ((!IS_FINITE(otherPrice)) || (otherPrice > newPrice)) {
+        changed = true;
         priceMatrix[other] = newPrice;
         pathMatrix[other] = cur.i;
         Vertex v = Vertex(other, newPrice);
@@ -56,6 +58,8 @@ void dijkstraLoop(std::priority_queue<Vertex> &queue,
       }
     }
   }
+
+  return changed;
 }
 
 
@@ -81,12 +85,13 @@ List reachability(const NumericMatrix m, const NumericVector dist, int target) {
     }
   }
 
-  dijkstraLoop(queue, priceMatrix, pathMatrix, dist, target);
+  bool changed = dijkstraLoop(queue, priceMatrix, pathMatrix, dist, target);
 
   return List::create(
     _["prices"] = priceMatrix,
     _["paths"] = pathMatrix,
-    _["init"] = init);
+    _["init"] = init,
+    _["changed"] = changed);
 }
 
 

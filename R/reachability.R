@@ -1,3 +1,12 @@
+reachabilityInternal <- function(m, dist, target) {
+  res <- .Call('_hexmatrix_reachability', PACKAGE = 'hexmatrix', m, dist, target - 1)
+  res$paths <- res$paths + 1
+  res$init <- res$init + 1
+
+  res
+}
+
+
 #' @export
 reachability <- function(m,
                          dist=1,
@@ -24,9 +33,5 @@ reachability <- function(m,
     target <- -1   # search cheapest paths to all cells
   }
 
-  res <- .Call('_hexmatrix_reachability', PACKAGE = 'hexmatrix', m, dist, target - 1)
-  res$paths <- res$paths + 1
-  res$init <- res$init + 1
-
-  res
+  reachabilityInternal(m, dist, target)
 }
