@@ -1,16 +1,32 @@
 test_that("shift down", {
   m <- matrix(1:12, nrow=4, ncol=3, byrow=TRUE)
-
   expect_equal(shiftDown(m),
                matrix(c(rep(NA, 3), 1:9), nrow=4, ncol=3, byrow=TRUE))
+
+  m <- array(1:24, dim=c(4, 3, 2))
+  expect_equal(shiftDown(m),
+               array(c(NA, 1, 2, 3,
+                       NA, 5, 6, 7,
+                       NA, 9, 10, 11,
+                       NA, 13, 14, 15,
+                       NA, 17, 18, 19,
+                       NA, 21, 22, 23), dim=c(4, 3, 2)))
 })
 
 
 test_that("shift up", {
   m <- matrix(1:12, nrow=4, ncol=3, byrow=TRUE)
-
   expect_equal(shiftUp(m),
                matrix(c(4:12, rep(NA, 3)), nrow=4, ncol=3, byrow=TRUE))
+
+  m <- array(1:24, dim=c(4, 3, 2))
+  expect_equal(shiftUp(m),
+               array(c(2, 3, 4, NA,
+                       6, 7, 8, NA,
+                       10, 11, 12, NA,
+                       14, 15, 16, NA,
+                       18, 19, 20, NA,
+                       22, 23, 24, NA), dim=c(4, 3, 2)))
 })
 
 

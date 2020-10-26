@@ -1,12 +1,14 @@
 #' @import assertthat
 #' @export
 shiftDown <- function(m) {
+  assert_that(is.hexmatrix(m) || is.hexarray(m))
   .Call('_hexmatrix_shiftDown', PACKAGE = 'hexmatrix', m, nrow(m))
 }
 
 
 #' @export
 shiftUp <- function(m) {
+  assert_that(is.hexmatrix(m) || is.hexarray(m))
   .Call('_hexmatrix_shiftUp', PACKAGE = 'hexmatrix', m, nrow(m))
 }
 
