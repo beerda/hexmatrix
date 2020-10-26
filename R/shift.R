@@ -16,12 +16,10 @@ shiftUp <- function(m) {
 #' @export
 shiftRight <- function(m,
                        odd=TRUE) {
-  assert_that(is.matrix(m))
+  assert_that(is.hexmatrix(m) || is.hexarray(m))
   assert_that(is.flag(odd))
-
-  rows <- seq_len(nrow(m)) %% 2 == (odd + 0)
-  m[rows, ] <- cbind(NA, m[rows, -ncol(m), drop=FALSE])
-  m
+  .Call('_hexmatrix_shiftRight', PACKAGE = 'hexmatrix',
+        m, nrow(m), ncol(m), as.integer(odd))
 }
 
 
@@ -30,8 +28,6 @@ shiftLeft <- function(m,
                       odd=TRUE) {
   assert_that(is.matrix(m))
   assert_that(is.flag(odd))
-
-  rows <- seq_len(nrow(m)) %% 2 == (odd + 0)
-  m[rows, ] <- cbind(m[rows, -1, drop=FALSE], NA)
-  m
+  .Call('_hexmatrix_shiftLeft', PACKAGE = 'hexmatrix',
+        m, nrow(m), ncol(m), as.integer(odd))
 }

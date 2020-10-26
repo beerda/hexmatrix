@@ -37,3 +37,11 @@
     .Call(`_hexmatrix_shiftUp`, v, rows)
 }
 
+.shiftRight <- function(v, rows, cols, odd) {
+    .Call(`_hexmatrix_shiftRight`, v, rows, cols, odd)
+}
+
+.shiftLeft <- function(v, rows, cols, odd) {
+    .Call(`_hexmatrix_shiftLeft`, v, rows, cols, odd)
+}
+

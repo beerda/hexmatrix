@@ -37,6 +37,11 @@ test_that("shift left", {
                matrix(c(2:3, NA, 4:6, 8:9, NA, 10:12), nrow=4, ncol=3, byrow=TRUE))
   expect_equal(shiftLeft(m, FALSE),
                matrix(c(1:3, 5:6, NA, 7:9, 11:12, NA), nrow=4, ncol=3, byrow=TRUE))
+
+  expect_equal(shiftLeft(m[-4, ], TRUE),
+               matrix(c(2:3, NA, 4:6, 8:9, NA), nrow=3, ncol=3, byrow=TRUE))
+  expect_equal(shiftLeft(m[-4, ], FALSE),
+               matrix(c(1:3, 5:6, NA, 7:9), nrow=3, ncol=3, byrow=TRUE))
 })
 
 
@@ -47,4 +52,9 @@ test_that("shift right", {
                matrix(c(NA, 1:2, 4:6, NA, 7:8, 10:12), nrow=4, ncol=3, byrow=TRUE))
   expect_equal(shiftRight(m, FALSE),
                matrix(c(1:3, NA, 4:5, 7:9, NA, 10:11), nrow=4, ncol=3, byrow=TRUE))
+
+  expect_equal(shiftRight(m[-4, ], TRUE),
+               matrix(c(NA, 1:2, 4:6, NA, 7:8), nrow=3, ncol=3, byrow=TRUE))
+  expect_equal(shiftRight(m[-4, ], FALSE),
+               matrix(c(1:3, NA, 4:5, 7:9), nrow=3, ncol=3, byrow=TRUE))
 })

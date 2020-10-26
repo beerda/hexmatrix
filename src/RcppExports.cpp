@@ -124,6 +124,34 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// shiftRight
+SEXP shiftRight(SEXP v, const int rows, const int cols, const int odd);
+RcppExport SEXP _hexmatrix_shiftRight(SEXP vSEXP, SEXP rowsSEXP, SEXP colsSEXP, SEXP oddSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type v(vSEXP);
+    Rcpp::traits::input_parameter< const int >::type rows(rowsSEXP);
+    Rcpp::traits::input_parameter< const int >::type cols(colsSEXP);
+    Rcpp::traits::input_parameter< const int >::type odd(oddSEXP);
+    rcpp_result_gen = Rcpp::wrap(shiftRight(v, rows, cols, odd));
+    return rcpp_result_gen;
+END_RCPP
+}
+// shiftLeft
+SEXP shiftLeft(SEXP v, const int rows, const int cols, const int odd);
+RcppExport SEXP _hexmatrix_shiftLeft(SEXP vSEXP, SEXP rowsSEXP, SEXP colsSEXP, SEXP oddSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type v(vSEXP);
+    Rcpp::traits::input_parameter< const int >::type rows(rowsSEXP);
+    Rcpp::traits::input_parameter< const int >::type cols(colsSEXP);
+    Rcpp::traits::input_parameter< const int >::type odd(oddSEXP);
+    rcpp_result_gen = Rcpp::wrap(shiftLeft(v, rows, cols, odd));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_hexmatrix_altpaths", (DL_FUNC) &_hexmatrix_altpaths, 7},
@@ -135,6 +163,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hexmatrix_region", (DL_FUNC) &_hexmatrix_region, 2},
     {"_hexmatrix_shiftDown", (DL_FUNC) &_hexmatrix_shiftDown, 2},
     {"_hexmatrix_shiftUp", (DL_FUNC) &_hexmatrix_shiftUp, 2},
+    {"_hexmatrix_shiftRight", (DL_FUNC) &_hexmatrix_shiftRight, 4},
+    {"_hexmatrix_shiftLeft", (DL_FUNC) &_hexmatrix_shiftLeft, 4},
     {NULL, NULL, 0}
 };
 
