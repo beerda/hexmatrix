@@ -1,3 +1,20 @@
+#' Create a copy of given data and possibly change some attributes of the new
+#' instance.
+#'
+#' @param m A matrix to be copied
+#' @param a An array to be copied
+#' @param data New data to be stored in the new copy
+#' @param nrow The new number of rows of the copied matrix
+#' @param ncol The new number of columns of the copied matrix
+#' @param byrow Whehter the data of the copied matrix has to be assigned by row
+#'     first
+#' @param dimnames THe dimension names of the new copy
+#' @param dim The dimensions of the new copied array
+#' @examples
+#' m <- matrix(1:6, nrow=3)
+#'
+#' # create a new matrix of the same dimensions as m, but different data
+#' m2 <- like(m, data=0)
 #' @rdname like
 #' @export
 like <- function(...) {
