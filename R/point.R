@@ -17,7 +17,7 @@ point <- function(m, index, ...) {
 #' @rdname index
 #' @export
 point.matrix <- function(m, index, ...) {
-  assert_that(is.matrix(m))
+  assert_that(is.hexmatrix(m))
   assert_that(is.count(index))
   assert_that(index <= nrow(m) * ncol(m))
 

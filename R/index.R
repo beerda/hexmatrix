@@ -19,7 +19,7 @@ index <- function(m, point, ...) {
 #' @rdname index
 #' @export
 index.matrix <- function(m, point, ...) {
-  assert_that(is.matrix(m))
+  assert_that(is.hexmatrix(m))
   assert_that(length(point) == 2)
   assert_that(is.count(point[1]))
   assert_that(is.count(point[2]))
