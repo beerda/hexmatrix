@@ -29,3 +29,11 @@
     .Call(`_hexmatrix_region`, m, index)
 }
 
+.shiftDown <- function(v, rows) {
+    .Call(`_hexmatrix_shiftDown`, v, rows)
+}
+
+.shiftUp <- function(v, rows) {
+    .Call(`_hexmatrix_shiftUp`, v, rows)
+}
+

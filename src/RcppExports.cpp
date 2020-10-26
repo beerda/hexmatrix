@@ -100,6 +100,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// shiftDown
+SEXP shiftDown(SEXP v, const int rows);
+RcppExport SEXP _hexmatrix_shiftDown(SEXP vSEXP, SEXP rowsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type v(vSEXP);
+    Rcpp::traits::input_parameter< const int >::type rows(rowsSEXP);
+    rcpp_result_gen = Rcpp::wrap(shiftDown(v, rows));
+    return rcpp_result_gen;
+END_RCPP
+}
+// shiftUp
+SEXP shiftUp(SEXP v, const int rows);
+RcppExport SEXP _hexmatrix_shiftUp(SEXP vSEXP, SEXP rowsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type v(vSEXP);
+    Rcpp::traits::input_parameter< const int >::type rows(rowsSEXP);
+    rcpp_result_gen = Rcpp::wrap(shiftUp(v, rows));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_hexmatrix_altpaths", (DL_FUNC) &_hexmatrix_altpaths, 7},
@@ -109,6 +133,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hexmatrix_reachability", (DL_FUNC) &_hexmatrix_reachability, 3},
     {"_hexmatrix_shortest", (DL_FUNC) &_hexmatrix_shortest, 3},
     {"_hexmatrix_region", (DL_FUNC) &_hexmatrix_region, 2},
+    {"_hexmatrix_shiftDown", (DL_FUNC) &_hexmatrix_shiftDown, 2},
+    {"_hexmatrix_shiftUp", (DL_FUNC) &_hexmatrix_shiftUp, 2},
     {NULL, NULL, 0}
 };
 

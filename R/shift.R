@@ -1,17 +1,13 @@
 #' @import assertthat
 #' @export
 shiftDown <- function(m) {
-  assert_that(is.matrix(m))
-
-  rbind(NA, m[-nrow(m), , drop=FALSE])
+  .Call('_hexmatrix_shiftDown', PACKAGE = 'hexmatrix', m, nrow(m))
 }
 
 
 #' @export
 shiftUp <- function(m) {
-  assert_that(is.matrix(m))
-
-  rbind(m[-1, , drop=FALSE], NA)
+  .Call('_hexmatrix_shiftUp', PACKAGE = 'hexmatrix', m, nrow(m))
 }
 
 
