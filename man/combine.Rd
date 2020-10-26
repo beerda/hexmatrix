@@ -11,18 +11,20 @@ combine(a, b, f = `+`)
 
 \item{b}{the second list to be combined}
 
-\item{f}{the function to be called pairwisely on the elements of `a` and `b` to produce the combinded result}
+\item{f}{the function to be called pairwisely on the elements of `a` and `b`
+to produce the combined result}
 }
 \value{
 an unnamed list of elements
 }
 \description{
-Function returns a list combined by applying a function `f` pairwisely on \eqn{i}-th element
-of a list `a` and `b`, for each \eqn{i}. If `a`'s (resp. `b`'s) \eqn{i}-th element is `NULL`,
-the function `f` is not called and the result contains the `b`'s (resp. `a`'s) non-`NULL` element
-at the \eqn{i}-th position. The resulting list has size of the larger list and the elements of the
-shorter input lists are recycled to size of the larger list. The elements are combined by index.
-Names of the elements are ignored.
+Function returns a list combined by applying a function `f` pairwisely on
+\eqn{i}-th element of a list `a` and `b`, for each \eqn{i}. If `a`'s (resp.
+`b`'s) \eqn{i}-th element is `NULL`, the function `f` is not called and the
+result contains the `b`'s (resp. `a`'s) non-`NULL` element at the \eqn{i}-th
+position. The resulting list has size of the larger list, hence the elements
+of the shorter input lists are recycled to the size of the larger list. The
+elements are combined by index. Names of the elements are ignored.
 }
 \examples{
 combine(list(1, 2, 3), list(2, 4, 6), f=`+`)
