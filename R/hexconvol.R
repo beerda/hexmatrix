@@ -23,16 +23,16 @@
 #' @export
 hexconvol <- function(m,
                       probs=1) {
-  assert_that(is.matrix(m))
+  assert_that(is.hexmatrix(m) || is.hexarray(m))
   assert_that(is.numeric(m))
   assert_that(is.vector(probs) & is.numeric(probs))
 
   p <- rep(probs, length.out=7)
   n <- neighbours(m, TRUE)
-
+  margin <- c(1, 2, if (is.hexarray(m)) 3 else NULL)
   f <- function(...) {
     x <- c(...)
     sum(x * p, na.rm=TRUE)
   }
-  apply(n, c(1, 2), f)
+  apply(n, margin, f)
 }
