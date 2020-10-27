@@ -26,7 +26,7 @@ shiftRight <- function(m,
 #' @export
 shiftLeft <- function(m,
                       odd=TRUE) {
-  assert_that(is.matrix(m))
+  assert_that(is.hexmatrix(m) || is.hexarray(m))
   assert_that(is.flag(odd))
   .Call('_hexmatrix_shiftLeft', PACKAGE = 'hexmatrix',
         m, nrow(m), ncol(m), as.integer(odd))
