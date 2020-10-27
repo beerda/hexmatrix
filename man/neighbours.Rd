@@ -2,12 +2,23 @@
 % Please edit documentation in R/neighbours.R
 \name{neighbours}
 \alias{neighbours}
-\title{Returns a list of matrices that represent values of neighbours
+\title{Returns an array that represents values of neighbours
 in the clock-wise order starting from top-left neighbour}
 \usage{
 neighbours(m, self = FALSE)
 }
+\arguments{
+\item{m}{a matrix or array to compute the neighbours from}
+
+\item{self}{whether to add the 7-th direction, which is a copy of `m`}
+}
+\value{
+If `m` is a matrix, the returned value is an array with third
+    dimension representing the neighbour direction (1 to 6, or 7 if `self` is
+    `TRUE`). If `m` is a 3D array, then then the result is a 4D array with
+    the fourth dimension representing the direction.
+}
 \description{
-Returns a list of matrices that represent values of neighbours
+Returns an array that represents values of neighbours
 in the clock-wise order starting from top-left neighbour
 }
