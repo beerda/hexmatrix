@@ -21,3 +21,23 @@ test_that("morph (erosion)", {
   expected <- matrix(FALSE, nrow=4, ncol=5)
   expect_equal(morph(m, dilate=FALSE), expected)
 })
+
+
+test_that("morph(hexarray)", {
+  a <- array(FALSE, dim=c(4, 5, 2))
+  a[2, 2, 1] <- TRUE
+  a[4, 5, 1] <- TRUE
+
+  expected <- matrix(FALSE, nrow=4, ncol=5)
+  expected[c(1, 2, 3, 5, 6, 7, 10, 15, 16, 19, 20)] <- TRUE
+  res <- morph(a, dilate=TRUE)
+  expect_equal(res[, , 1], expected)
+  expect_equal(res[, , 2], like(expected, data=FALSE))
+
+  a <- array(FALSE, dim=c(4, 5, 2))
+  a[2, 2, 2] <- TRUE
+  a[4, 5, 2] <- TRUE
+  res <- morph(a, dilate=TRUE)
+  expect_equal(res[, , 2], expected)
+  expect_equal(res[, , 1], like(expected, data=FALSE))
+})
