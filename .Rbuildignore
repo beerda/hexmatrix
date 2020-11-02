@@ -1,3 +1,5 @@
 ^hexmatrix\.Rproj$
 ^\.Rproj\.user$
 ^\.Rprofile$
+^\.travis.yml$
+^appveyor.yml$
