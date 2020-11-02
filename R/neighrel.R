@@ -7,9 +7,11 @@ neighrel <- function(f, ...) {
     return(NULL)
   }
   m1 <- dots[[1]]
-  assert_that(is.matrix(m1))
   for (i in seq_along(dots)) {
-    assert_that(all(dim(dots[[i]]) == dim(m1)))
+    d <- dots[[i]]
+    assert_that(is.hexmatrix(d) || is.hexarray(d))
+    assert_that(length(dim(d)) == length(dim(m1)))
+    assert_that(all(dim(d) == dim(m1)))
   }
   assert_that(is.function(f))
 
