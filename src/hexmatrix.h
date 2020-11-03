@@ -19,6 +19,6 @@ extern int whichDir(int cur, int other, int rows, int cols);
 extern List shortest(int source, int target, const NumericVector dist);
 
 // region.cpp
-extern NumericVector region(const NumericMatrix m, int index);
+extern NumericVector region(const NumericVector m, int index);
 
 #endif

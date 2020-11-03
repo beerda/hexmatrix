@@ -89,12 +89,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // region
-NumericVector region(const NumericMatrix m, int index);
+NumericVector region(const NumericVector m, int index);
 RcppExport SEXP _hexmatrix_region(SEXP mSEXP, SEXP indexSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericMatrix >::type m(mSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type m(mSEXP);
     Rcpp::traits::input_parameter< int >::type index(indexSEXP);
     rcpp_result_gen = Rcpp::wrap(region(m, index));
     return rcpp_result_gen;
