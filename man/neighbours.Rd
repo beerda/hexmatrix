@@ -10,13 +10,13 @@ neighbours(m, self = FALSE)
 \arguments{
 \item{m}{a matrix or array to compute the neighbours from}
 
-\item{self}{whether to add the 7-th direction, which is a copy of `m`}
+\item{self}{whether to add the 7-th direction, which is a copy of \code{m}}
 }
 \value{
-If `m` is a matrix, the returned value is an array with third
-    dimension representing the neighbour direction (1 to 6, or 7 if `self` is
-    `TRUE`). If `m` is a 3D array, then then the result is a 4D array with
-    the fourth dimension representing the direction.
+If \code{m} is a matrix, the returned value is an array with third
+dimension representing the neighbour direction (1 to 6, or 7 if \code{self} is
+\code{TRUE}). If \code{m} is a 3D array, then then the result is a 4D array with
+the fourth dimension representing the direction.
 }
 \description{
 Returns an array that represents values of neighbours

@@ -12,9 +12,9 @@ region(m, i)
 \item{i}{A index of a cell to start from}
 }
 \value{
-A vector of indices of cells that are neighbours of `i` and have the
-  same value in `m` as `m[i]`, or cells recursively neighbouring with such
-  neighbours.
+A vector of indices of cells that are neighbours of \code{i} and have the
+same value in \code{m} as \code{m[i]}, or cells recursively neighbouring with such
+neighbours.
 }
 \description{
 For a given hexmatrix and a given index of a cell, find all indices of all

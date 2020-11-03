@@ -26,10 +26,10 @@ hiking(0)
 }
 \references{
 Tobler, Waldo (February 1993). Three presentations on
-  geographical analysis and modeling: Non-isotropic geographic modeling
-  speculations on the geometry of geography global spatial analysis.
-  Technical Report. National center for geographic information and analysis.
-  93 (1).
+geographical analysis and modeling: Non-isotropic geographic modeling
+speculations on the geometry of geography global spatial analysis.
+Technical Report. National center for geographic information and analysis.
+93 (1).
 
-https://en.wikipedia.org/wiki/Tobler%27s_hiking_function
+https://en.wikipedia.org/wiki/Tobler\%27s_hiking_function
 }

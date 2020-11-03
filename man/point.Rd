@@ -14,11 +14,11 @@ point(m, index, ...)
 }
 \value{
 For matrix, it returns a vector of two values (row, column). For
-    array, a vector of three values is returned (row, column, layer).
+array, a vector of three values is returned (row, column, layer).
 }
 \description{
-This function is an inverse function to [index()].
+This function is an inverse function to \code{\link[=index]{index()}}.
 }
 \seealso{
-[index()]
+\code{\link[=index]{index()}}
 }

@@ -15,8 +15,8 @@ whichDir(current, other, m)
 \item{m}{The underlying hexmatrix or hexarray}
 }
 \value{
-A number from 1 to 6 indicating the direction from `current` to
-  `other` cell. `NA` is returned if `current` and `other` are not neighbours.
+A number from 1 to 6 indicating the direction from \code{current} to
+\code{other} cell. \code{NA} is returned if \code{current} and \code{other} are not neighbours.
 }
 \description{
 Return the number of direction from the current to the other neighbouring

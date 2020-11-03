@@ -28,11 +28,11 @@ provided (row, column, layer).}
 }
 \value{
 An integer value corresponding to the index of the element determined
-    in `point`, if `m` was treated as a single-dimensional vector.
+in \code{point}, if \code{m} was treated as a single-dimensional vector.
 }
 \description{
-This function is an inverse function to [point()].
+This function is an inverse function to \code{\link[=point]{point()}}.
 }
 \seealso{
-[point()]
+\code{\link[=point]{point()}}
 }

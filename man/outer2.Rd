@@ -10,15 +10,15 @@ outer2(f, ...)
 \item{f}{The function to be used on the outer products}
 
 \item{...}{Vectors, matrices or arrays whose values will be used as arguments
-to the function `f`. The elements of the first argument will be used as
-the first argument to `f`, elements of the second argument will be used as
-the second argument to `f` etc.}
+to the function \code{f}. The elements of the first argument will be used as
+the first argument to \code{f}, elements of the second argument will be used as
+the second argument to \code{f} etc.}
 }
 \value{
 An array that is an outer product of the input arguments.
 }
 \description{
-This function works similarly as `base::outer()` except that it allows the
+This function works similarly as \code{base::outer()} except that it allows the
 multiplication of more arguments than just two.
 }
 \examples{

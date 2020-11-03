@@ -14,7 +14,7 @@ The opposite direction number, i.e. 4 for 1, 5 for 2, 6 for 3, 1 for
 4, 2 for 5, 3 for 6 and 7 for 7.
 }
 \description{
-In `hexmatrix` package, the directions of neighbours of a cell in a hexmatrix
+In \code{hexmatrix} package, the directions of neighbours of a cell in a hexmatrix
 are numbered from 1 to 7 in clock-wise direction starting from top-left.
 That is, number 1 refers to the top-left neighbour, 2 is for top-right
 neighbour, 3 for right, 4 for bottom-right, 5 for bottom-left and 6 for left

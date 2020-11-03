@@ -13,21 +13,21 @@ hexconvol(m, probs = 1)
 clock-wisely from top-left. The 7th value corresponds to the weight of a value
 at the "current" position. Precisely, the weights are understood as follows:
 \enumerate{
-   \item `probs[1]` for top-left,
-   \item `probs[2]` for top-right,
-   \item `probs[3]` for right,
-   \item `probs[4]` for bottom-right,
-   \item `probs[5]` for bottom-left,
-   \item `probs[6]` for left neighbour's weight of the "current" position,
-   \item `probs[7]` for the "current" value's weight.
+\item \code{probs[1]} for top-left,
+\item \code{probs[2]} for top-right,
+\item \code{probs[3]} for right,
+\item \code{probs[4]} for bottom-right,
+\item \code{probs[5]} for bottom-left,
+\item \code{probs[6]} for left neighbour's weight of the "current" position,
+\item \code{probs[7]} for the "current" value's weight.
 }}
 }
 \value{
-a hexmatrix of dimensions equal to `m` with values computed as a convolution
-    over the neighbours of `m`'s values
+a hexmatrix of dimensions equal to \code{m} with values computed as a convolution
+over the neighbours of \code{m}'s values
 }
 \description{
-The result of this function is a hexmatrix of dimensions equal to `m` with values
+The result of this function is a hexmatrix of dimensions equal to \code{m} with values
 computed as a weighted sum of value at the given position and in the neighbourhood
-of that position. The weights are given by the `probs` argument.
+of that position. The weights are given by the \code{probs} argument.
 }

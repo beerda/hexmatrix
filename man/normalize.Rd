@@ -16,12 +16,12 @@ normalize(x, MARGIN = seq_len(length(dim(x) - 1)), SUM = sum, DIV = `/`)
 \item{DIV}{The division function}
 }
 \value{
-An array of dimensions equal to `x` with normalized values
+An array of dimensions equal to \code{x} with normalized values
 }
 \description{
 By normalization we understand dividing each value of the cell by a sum
-computed along the given `MARGIN`. The summation and division may be replaced
-with custom functions `SUM` and `DIV`, respectively.
+computed along the given \code{MARGIN}. The summation and division may be replaced
+with custom functions \code{SUM} and \code{DIV}, respectively.
 }
 \examples{
 m <- matrix(1:12, nrow=4)
