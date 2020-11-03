@@ -1,6 +1,12 @@
+#' Rescale the given hexmatrix by factor of 0.5. The resulting hexmatrix would
+#' have half of rows and half of columns of the original matrix. The values in
+#' cells will be summed appropriately.
+#'
+#' @param m A hexmatrix to shrink.
+#' @return A rescaled hexmatrix.
 #' @export
 shrink <- function(m) {
-  assert_that(is.matrix(m))
+  assert_that(is.hexmatrix(m))
 
   orig <- dim(m)
   if (any(orig < 1)) {
