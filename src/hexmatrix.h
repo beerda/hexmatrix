@@ -20,6 +20,7 @@ extern List shortest(int source, int target, const NumericVector dist);
 extern NumericVector region(const NumericVector m, int index);
 
 
+#include "graph.h"
 #include "dijkstra.h"
 
 
