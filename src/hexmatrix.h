@@ -3,8 +3,6 @@
 
 
 #include <Rcpp.h>
-
-
 using namespace Rcpp;
 
 
@@ -20,5 +18,9 @@ extern List shortest(int source, int target, const NumericVector dist);
 
 // region.cpp
 extern NumericVector region(const NumericVector m, int index);
+
+
+#include "dijkstra.h"
+
 
 #endif

@@ -25,5 +25,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 SystemRequirements: C++11
 LinkingTo: 
-    Rcpp
+    Rcpp,
+    testthat
 Language: en-US
