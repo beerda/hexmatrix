@@ -74,6 +74,9 @@ public:
     layerIndices(vertex, direction, sourceLayer, targetLayer);
     if (sourceLayer == targetLayer) {
       int res = neigh(direction, vertex % rowcols, rows, cols);
+      if (res < 0) {
+        return -1;
+      }
       return res + sourceLayer * rowcols;
     } else {
       return vertex % rowcols + targetLayer * rowcols;

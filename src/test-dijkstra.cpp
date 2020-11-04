@@ -136,6 +136,81 @@ context("dijkstra") {
     expect_true(g.neighbour(29, 7) == 17);
   }
 
+  test_that("DijkstraGraph::neighbour() nonexistent") {
+    DijkstraGraph g = initGraph(4, 3, 2);
+    expect_true(g.neighbour(0, 0) == -1);
+    expect_true(g.neighbour(0, 1) == -1);
+    expect_true(g.neighbour(0, 5) == -1);
+
+    expect_true(g.neighbour(4, 0) == -1);
+    expect_true(g.neighbour(4, 1) == -1);
+
+    expect_true(g.neighbour(8, 0) == -1);
+    expect_true(g.neighbour(8, 1) == -1);
+    expect_true(g.neighbour(8, 2) == -1);
+    expect_true(g.neighbour(8, 3) == -1);
+
+    expect_true(g.neighbour(9, 2) == -1);
+
+    expect_true(g.neighbour(10, 1) == -1);
+    expect_true(g.neighbour(10, 2) == -1);
+    expect_true(g.neighbour(10, 3) == -1);
+
+    expect_true(g.neighbour(11, 2) == -1);
+    expect_true(g.neighbour(11, 3) == -1);
+    expect_true(g.neighbour(11, 4) == -1);
+
+    expect_true(g.neighbour(7, 3) == -1);
+    expect_true(g.neighbour(7, 4) == -1);
+
+    expect_true(g.neighbour(3, 0) == -1);
+    expect_true(g.neighbour(3, 3) == -1);
+    expect_true(g.neighbour(3, 4) == -1);
+    expect_true(g.neighbour(3, 5) == -1);
+
+    expect_true(g.neighbour(2, 5) == -1);
+
+    expect_true(g.neighbour(1, 0) == -1);
+    expect_true(g.neighbour(1, 4) == -1);
+    expect_true(g.neighbour(1, 5) == -1);
+    //----
+    expect_true(g.neighbour(12 + 0, 0) == -1);
+    expect_true(g.neighbour(12 + 0, 1) == -1);
+    expect_true(g.neighbour(12 + 0, 5) == -1);
+
+    expect_true(g.neighbour(12 + 4, 0) == -1);
+    expect_true(g.neighbour(12 + 4, 1) == -1);
+
+    expect_true(g.neighbour(12 + 8, 0) == -1);
+    expect_true(g.neighbour(12 + 8, 1) == -1);
+    expect_true(g.neighbour(12 + 8, 2) == -1);
+    expect_true(g.neighbour(12 + 8, 3) == -1);
+
+    expect_true(g.neighbour(12 + 9, 2) == -1);
+
+    expect_true(g.neighbour(12 + 10, 1) == -1);
+    expect_true(g.neighbour(12 + 10, 2) == -1);
+    expect_true(g.neighbour(12 + 10, 3) == -1);
+
+    expect_true(g.neighbour(12 + 11, 2) == -1);
+    expect_true(g.neighbour(12 + 11, 3) == -1);
+    expect_true(g.neighbour(12 + 11, 4) == -1);
+
+    expect_true(g.neighbour(12 + 7, 3) == -1);
+    expect_true(g.neighbour(12 + 7, 4) == -1);
+
+    expect_true(g.neighbour(12 + 3, 0) == -1);
+    expect_true(g.neighbour(12 + 3, 3) == -1);
+    expect_true(g.neighbour(12 + 3, 4) == -1);
+    expect_true(g.neighbour(12 + 3, 5) == -1);
+
+    expect_true(g.neighbour(12 + 2, 5) == -1);
+
+    expect_true(g.neighbour(12 + 1, 0) == -1);
+    expect_true(g.neighbour(12 + 1, 4) == -1);
+    expect_true(g.neighbour(12 + 1, 5) == -1);
+  }
+
   test_that("DijkstraGraph::opositeDirection()") {
     DijkstraGraph g = initGraph(4, 3, 3);
 

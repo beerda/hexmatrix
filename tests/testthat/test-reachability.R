@@ -107,3 +107,19 @@ test_that("reachability to a specific target", {
     expect_equal(res$paths[p], expectedPaths[p])
   }
 })
+
+test_that("reachability bug?", {
+  dist <- matrix(1, nrow=4, ncol=3)
+  m <- array(NA_real_, dim=c(4, 3, 2))
+  m[2, 2, 1] <- 0
+  res <- reachability(m, dist, 0)
+
+  expect_equal(res$init, 6)
+  expect_equal(res$paths,
+               array(c(6, 6, 6, 3,
+                       6, 0, 6, 7,
+                       10, 6, 10, 7,
+                       18, 18, 18, 15,
+                       18, 6, 18, 19,
+                       22, 18, 22, 19), dim=c(4, 3, 2)))
+})
