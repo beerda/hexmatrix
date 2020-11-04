@@ -4,18 +4,37 @@
 class PathReduceContext {
 public:
   RObject* cache;
-  List data;
-  NumericMatrix path;
+  List dist;
+  List trans;
+  NumericVector path;
   RObject origin;
   Function f;
   int rows;
   int cols;
   int rowcols;
+  int layers;
+  int length;
 
-  PathReduceContext(List aData, NumericMatrix aPath, RObject aOrigin, Function aF) :
-    cache(NULL), data(aData), path(aPath), origin(aOrigin), f(aF),
-    rows(aPath.nrow()), cols(aPath.ncol()), rowcols(aPath.nrow() * aPath.ncol())
-  { cache = new RObject[rowcols]; }
+  PathReduceContext(List aDist,
+                    List aTrans,
+                    NumericVector aPath,
+                    RObject aOrigin,
+                    Function aF) :
+    cache(NULL),
+    dist(aDist),
+    trans(aTrans),
+    path(aPath),
+    origin(aOrigin),
+    f(aF)
+  {
+    NumericVector dim = aPath.attr("dim");
+    rows = dim[0];
+    cols = dim[1];
+    layers = dim[2];
+    rowcols = rows * cols;
+    length = rows * cols * layers;
+    cache = new RObject[length];
+  }
 
   ~PathReduceContext()
   { delete[] cache; }
@@ -39,10 +58,24 @@ RObject pathReduceInternal(const int i, PathReduceContext& ctx) {
   next--; // switch to C-like indexing
   ctx.cache[i] = naVec; // avoid infinite loop in cyclic paths
 
-  if (next >= 0 && next <= ctx.rowcols) {
-    int dir = whichDir(i, next, ctx.rows, ctx.cols);
+  if (next >= 0 && next <= ctx.length) {
     RObject res = pathReduceInternal(next, ctx);
-    ctx.cache[i] = ctx.f(ctx.data[i + ctx.rowcols * dir], res);
+    RObject price;
+    int dir = whichDir(i, next, ctx.rows, ctx.cols);
+    if (dir >= 0) {
+      // direction within layer
+      int index = i + ctx.length * dir;
+      price = ctx.dist[index];
+    } else {
+      // direction between layers
+      int sourceLayer = i / ctx.rowcols;
+      int targetLayer = next / ctx.rowcols;
+      int index = (i % ctx.rowcols) + ctx.rowcols
+        * (sourceLayer * (ctx.layers - 1)
+             + (sourceLayer < targetLayer ? targetLayer - 1 : targetLayer));
+      price = ctx.trans[index];
+    }
+    ctx.cache[i] = ctx.f(price, res);
   }
 
   return ctx.cache[i];
@@ -50,11 +83,15 @@ RObject pathReduceInternal(const int i, PathReduceContext& ctx) {
 
 
 // [[Rcpp::export(name=".pathReduce")]]
-List pathReduce(const List data, const NumericMatrix path, const RObject origin, const Function f) {
-  PathReduceContext ctx = PathReduceContext(data, path, origin, f);
-  List result(ctx.rowcols);
+List pathReduce(const List dist,
+                const List trans,
+                const NumericVector path,
+                const RObject origin,
+                const Function f) {
+  PathReduceContext ctx = PathReduceContext(dist, trans, path, origin, f);
+  List result(ctx.length);
 
-  for (int i = 0; i < ctx.rowcols; ++i) {
+  for (int i = 0; i < ctx.length; ++i) {
     result[i] = pathReduceInternal(i, ctx);
   }
 

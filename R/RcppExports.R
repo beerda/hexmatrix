@@ -13,8 +13,8 @@
     .Call(`_hexmatrix_path`, to, paths)
 }
 
-.pathReduce <- function(data, path, origin, f) {
-    .Call(`_hexmatrix_pathReduce`, data, path, origin, f)
+.pathReduce <- function(dist, trans, path, origin, f) {
+    .Call(`_hexmatrix_pathReduce`, dist, trans, path, origin, f)
 }
 
 .reachability <- function(m, dist, trans, target) {

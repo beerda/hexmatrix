@@ -49,16 +49,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // pathReduce
-List pathReduce(const List data, const NumericMatrix path, const RObject origin, const Function f);
-RcppExport SEXP _hexmatrix_pathReduce(SEXP dataSEXP, SEXP pathSEXP, SEXP originSEXP, SEXP fSEXP) {
+List pathReduce(const List dist, const List trans, const NumericVector path, const RObject origin, const Function f);
+RcppExport SEXP _hexmatrix_pathReduce(SEXP distSEXP, SEXP transSEXP, SEXP pathSEXP, SEXP originSEXP, SEXP fSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const List >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix >::type path(pathSEXP);
+    Rcpp::traits::input_parameter< const List >::type dist(distSEXP);
+    Rcpp::traits::input_parameter< const List >::type trans(transSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type path(pathSEXP);
     Rcpp::traits::input_parameter< const RObject >::type origin(originSEXP);
     Rcpp::traits::input_parameter< const Function >::type f(fSEXP);
-    rcpp_result_gen = Rcpp::wrap(pathReduce(data, path, origin, f));
+    rcpp_result_gen = Rcpp::wrap(pathReduce(dist, trans, path, origin, f));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -160,7 +161,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hexmatrix_altpaths", (DL_FUNC) &_hexmatrix_altpaths, 7},
     {"_hexmatrix_whichDir", (DL_FUNC) &_hexmatrix_whichDir, 4},
     {"_hexmatrix_path", (DL_FUNC) &_hexmatrix_path, 2},
-    {"_hexmatrix_pathReduce", (DL_FUNC) &_hexmatrix_pathReduce, 4},
+    {"_hexmatrix_pathReduce", (DL_FUNC) &_hexmatrix_pathReduce, 5},
     {"_hexmatrix_reachability", (DL_FUNC) &_hexmatrix_reachability, 4},
     {"_hexmatrix_shortest", (DL_FUNC) &_hexmatrix_shortest, 3},
     {"_hexmatrix_region", (DL_FUNC) &_hexmatrix_region, 2},
