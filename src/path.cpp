@@ -2,7 +2,7 @@
 
 
 // [[Rcpp::export(name=".path")]]
-NumericVector path(int to, NumericMatrix paths) {
+NumericVector path(int to, NumericVector paths) {
   NumericVector res = NumericVector();
   do {
     if (to < 1 || to > paths.length()) {

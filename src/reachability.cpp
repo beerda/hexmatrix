@@ -1,97 +1,39 @@
-#include <queue>
 #include "hexmatrix.h"
 
 
-
-class Vertex {
-public:
-  int i;
-  double price;
-  Vertex(int ai, double aPrice) : i(ai), price(aPrice)  { }
-};
-
-
-bool operator<(const Vertex& v1, const Vertex& v2) {
-  if (v1.price == v2.price)
-    return v1.i < v2.i; // to behave in the same way on all platforms
-
-  return v1.price > v2.price;
-}
-
-
-bool dijkstraLoop(std::priority_queue<Vertex> &queue,
-                  NumericMatrix &priceMatrix,
-                  NumericMatrix &pathMatrix,
-                  const NumericVector &dist,
-                  int target) {
-  int rows = priceMatrix.nrow();
-  int cols = priceMatrix.ncol();
-  int rowcols = rows * cols;
-  bool changed = false;
-
-  while (!queue.empty()) {
-    Vertex cur = queue.top();
-    queue.pop();
-
-    if (cur.i == target)
-      break; // path to target found
-
-    for (int dir = 0; dir < 6; ++dir) {
-      int other = neigh(dir, cur.i, rows, cols);
-      if (other < 0)
-        continue;
-
-      int oppositeDir = (dir + 3) % 6;
-      double edgePrice = dist[other + rowcols * oppositeDir];
-      if (!IS_FINITE(edgePrice))
-        continue;
-
-      double otherPrice = priceMatrix[other];
-      double newPrice = cur.price + edgePrice;
-
-      if ((!IS_FINITE(otherPrice)) || (otherPrice > newPrice)) {
-        changed = true;
-        priceMatrix[other] = newPrice;
-        pathMatrix[other] = cur.i;
-        Vertex v = Vertex(other, newPrice);
-        queue.push(v);
-      }
-    }
-  }
-
-  return changed;
-}
-
-
 // [[Rcpp::export(name=".reachability")]]
-List reachability(const NumericMatrix m, const NumericVector dist, int target) {
-  int rows = m.nrow();
-  int cols = m.ncol();
+List reachability(const NumericVector m,
+                  const NumericVector dist,
+                  const NumericVector trans,
+                  int target) {
+  NumericVector dim = m.attr("dim");
+  int rows = dim[0];
+  int cols = dim[1];
+  int layers = dim[2];
   int rowcols = rows * cols;
-  NumericMatrix priceMatrix = NumericMatrix(clone(m));  // cloned m
-  NumericMatrix pathMatrix = NumericMatrix(rows, cols); // zero-filled
+  int rowcolayers = rowcols * layers;
+  NumericVector priceMatrix = NumericVector(clone(m));  // cloned m
+  NumericVector pathMatrix = NumericVector(Dimension(rows, cols, layers)); // zero-filled
   NumericVector init = NumericVector();
-  std::priority_queue<Vertex> queue;
+  DijkstraGraph graph(dist, trans, rows, cols, layers);
 
-  for (int i = 0; i < rowcols; ++i) {
+  for (int i = 0; i < rowcolayers; ++i) {
     double val = m[i];
     if (IS_FINITE(val)) {
       init.push_back(i);
-      Vertex v = Vertex(i, val);
-      queue.push(v);
+      graph.addStart(i, val);
       pathMatrix[i] = -1;
     } else {
       pathMatrix[i] = NA_REAL;
     }
   }
 
-  bool changed = dijkstraLoop(queue, priceMatrix, pathMatrix, dist, target);
+  graph.process(priceMatrix, pathMatrix, target);
 
   return List::create(
     _["prices"] = priceMatrix,
     _["paths"] = pathMatrix,
-    _["init"] = init,
-    _["changed"] = changed);
+    _["init"] = init);
 }
 
 
@@ -104,7 +46,7 @@ List shortest(int source, int target, const NumericVector dist) {
 
   NumericMatrix priceMatrix = NumericMatrix(rows, cols);  // zero-filled
   NumericMatrix pathMatrix = NumericMatrix(rows, cols);
-  std::priority_queue<Vertex> queue;
+  DijkstraGraph graph(dist, rows, cols, 1);
 
   for (int i = 0; i < rowcols; ++i) {
     priceMatrix[i] = NA_REAL;
@@ -112,10 +54,8 @@ List shortest(int source, int target, const NumericVector dist) {
   }
   priceMatrix[source] = 0;
   pathMatrix[source] = -1;
-  Vertex v = Vertex(source, 0);
-  queue.push(v);
-
-  dijkstraLoop(queue, priceMatrix, pathMatrix, dist, target);
+  graph.addStart(source, 0);
+  graph.process(priceMatrix, pathMatrix, target);
 
   NumericVector prices;
   NumericVector paths;

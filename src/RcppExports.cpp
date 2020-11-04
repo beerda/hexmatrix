@@ -37,13 +37,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // path
-NumericVector path(int to, NumericMatrix paths);
+NumericVector path(int to, NumericVector paths);
 RcppExport SEXP _hexmatrix_path(SEXP toSEXP, SEXP pathsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type to(toSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type paths(pathsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type paths(pathsSEXP);
     rcpp_result_gen = Rcpp::wrap(path(to, paths));
     return rcpp_result_gen;
 END_RCPP
@@ -63,15 +63,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // reachability
-List reachability(const NumericMatrix m, const NumericVector dist, int target);
-RcppExport SEXP _hexmatrix_reachability(SEXP mSEXP, SEXP distSEXP, SEXP targetSEXP) {
+List reachability(const NumericVector m, const NumericVector dist, const NumericVector trans, int target);
+RcppExport SEXP _hexmatrix_reachability(SEXP mSEXP, SEXP distSEXP, SEXP transSEXP, SEXP targetSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericMatrix >::type m(mSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type m(mSEXP);
     Rcpp::traits::input_parameter< const NumericVector >::type dist(distSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type trans(transSEXP);
     Rcpp::traits::input_parameter< int >::type target(targetSEXP);
-    rcpp_result_gen = Rcpp::wrap(reachability(m, dist, target));
+    rcpp_result_gen = Rcpp::wrap(reachability(m, dist, trans, target));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -153,18 +154,21 @@ BEGIN_RCPP
 END_RCPP
 }
 
+RcppExport SEXP run_testthat_tests(SEXP);
+
 static const R_CallMethodDef CallEntries[] = {
     {"_hexmatrix_altpaths", (DL_FUNC) &_hexmatrix_altpaths, 7},
     {"_hexmatrix_whichDir", (DL_FUNC) &_hexmatrix_whichDir, 4},
     {"_hexmatrix_path", (DL_FUNC) &_hexmatrix_path, 2},
     {"_hexmatrix_pathReduce", (DL_FUNC) &_hexmatrix_pathReduce, 4},
-    {"_hexmatrix_reachability", (DL_FUNC) &_hexmatrix_reachability, 3},
+    {"_hexmatrix_reachability", (DL_FUNC) &_hexmatrix_reachability, 4},
     {"_hexmatrix_shortest", (DL_FUNC) &_hexmatrix_shortest, 3},
     {"_hexmatrix_region", (DL_FUNC) &_hexmatrix_region, 2},
     {"_hexmatrix_shiftDown", (DL_FUNC) &_hexmatrix_shiftDown, 2},
     {"_hexmatrix_shiftUp", (DL_FUNC) &_hexmatrix_shiftUp, 2},
     {"_hexmatrix_shiftRight", (DL_FUNC) &_hexmatrix_shiftRight, 4},
     {"_hexmatrix_shiftLeft", (DL_FUNC) &_hexmatrix_shiftLeft, 4},
+    {"run_testthat_tests",      (DL_FUNC) &run_testthat_tests,      1},
     {NULL, NULL, 0}
 };
 
