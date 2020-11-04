@@ -71,7 +71,16 @@ reachability3d <- function(layers,
     for (l in seql) {
       m <- layers[[l]]
       d <- dists[[l]]
-      res <- reachabilityInternal(m, d, target)
+
+      res <- .Call('_hexmatrix_reachability',
+                   PACKAGE = 'hexmatrix',
+                   m,
+                   d,
+                   array(0, dim=c(rows, cols, 0)),
+                   target - 1)
+      res$paths <- res$paths + 1
+      res$init <- res$init + 1
+
       layers[[l]] <- res$prices
       changed <- changed || res$changed
     }
