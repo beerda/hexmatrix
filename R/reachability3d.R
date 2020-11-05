@@ -3,6 +3,8 @@ reachability3d <- function(layers,
                            dists=1,
                            transitions=0,
                            target=NULL) {
+  .Deprecated('reachability')
+
   # layers assertions
   if (is.matrix(layers)) {
     layers <- list(layers)
