@@ -35,7 +35,6 @@ pathReduce <- function(f, origin, path, dist=1, trans=0) {
   if (is.scalar(trans)) {
     trans <- matrix(trans, nrow=rows, ncol=cols)
   }
-  assert_that(is.matrix(trans))
   if (is.matrix(trans)) {
     assert_that(nrow(trans) == rows)
     assert_that(ncol(trans) == cols)
@@ -54,9 +53,13 @@ pathReduce <- function(f, origin, path, dist=1, trans=0) {
   if (length(len) == 1) {
     res <- unlist(res)
     if (len == 1) {
-      return(matrix(res, nrow=rows))
+      if (layers == 1) {
+        return(matrix(res, nrow=rows))
+      } else {
+        return(array(res, dim=dim(path)))
+      }
     } else {
-      return(array(res, dim=c(dim(dist), len)))
+      return(array(res, dim=c(dim(path), len)))
     }
 
   } else {

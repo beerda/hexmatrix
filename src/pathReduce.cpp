@@ -1,7 +1,7 @@
 #include "hexmatrix.h"
 
 
-class PathReduceContext {
+class PathReduceContext : public Graph {
 public:
   RObject* cache;
   List dist;
@@ -9,17 +9,17 @@ public:
   NumericVector path;
   RObject origin;
   Function f;
-  int rows;
-  int cols;
-  int rowcols;
-  int layers;
   int length;
 
   PathReduceContext(List aDist,
                     List aTrans,
                     NumericVector aPath,
                     RObject aOrigin,
-                    Function aF) :
+                    Function aF,
+                    int aRows,
+                    int aCols,
+                    int aLayers) :
+    Graph(aRows, aCols, aLayers),
     cache(NULL),
     dist(aDist),
     trans(aTrans),
@@ -27,12 +27,7 @@ public:
     origin(aOrigin),
     f(aF)
   {
-    NumericVector dim = aPath.attr("dim");
-    rows = dim[0];
-    cols = dim[1];
-    layers = dim[2];
-    rowcols = rows * cols;
-    length = rows * cols * layers;
+    length = aRows * aCols * aLayers;
     cache = new RObject[length];
   }
 
@@ -49,32 +44,33 @@ RObject pathReduceInternal(const int i, PathReduceContext& ctx) {
     return ctx.cache[i];
   }
 
-  int next = ctx.path[i];
-  if (next == 0) { // initial point (root)
+  int prev = ctx.path[i];
+  if (prev == 0) { // initial point (root)
     ctx.cache[i] = ctx.origin;
     return ctx.cache[i];
   }
 
-  next--; // switch to C-like indexing
+  prev--; // switch to C-like indexing
   ctx.cache[i] = naVec; // avoid infinite loop in cyclic paths
 
-  if (next >= 0 && next <= ctx.length) {
-    RObject res = pathReduceInternal(next, ctx);
+  if (prev >= 0 && prev <= ctx.length) {
+    RObject res = pathReduceInternal(prev, ctx);
     RObject price;
-    int dir = whichDir(i, next, ctx.rows, ctx.cols);
-    if (dir >= 0) {
-      // direction within layer
-      int index = i + ctx.length * dir;
-      price = ctx.dist[index];
-    } else {
+    int dir = ctx.whichDirection(prev, i);
+    if (dir >= 6) {
       // direction between layers
-      int sourceLayer = i / ctx.rowcols;
-      int targetLayer = next / ctx.rowcols;
-      int index = (i % ctx.rowcols) + ctx.rowcols
-        * (sourceLayer * (ctx.layers - 1)
-             + (sourceLayer < targetLayer ? targetLayer - 1 : targetLayer));
-      price = ctx.trans[index];
+      price = ctx.trans[ctx.transIndex(prev, dir)];
+    } else if (dir >= 0) {
+      // direction within layer
+      price = ctx.dist[ctx.distIndex(prev, dir)];
+    } else {
+      throw std::out_of_range("Invalid 'dir' in pathReduceInternal()");
     }
+      // int index = (i % ctx.rowcols) + ctx.rowcols
+    //     * (sourceLayer * (ctx.layers - 1)
+    //          + (sourceLayer < targetLayer ? targetLayer - 1 : targetLayer));
+    //   price = ctx.trans[index];
+    // }
     ctx.cache[i] = ctx.f(price, res);
   }
 
@@ -88,7 +84,9 @@ List pathReduce(const List dist,
                 const NumericVector path,
                 const RObject origin,
                 const Function f) {
-  PathReduceContext ctx = PathReduceContext(dist, trans, path, origin, f);
+  NumericVector dim = path.attr("dim");
+  PathReduceContext ctx = PathReduceContext(dist, trans, path, origin, f,
+                                            dim[0], dim[1], dim[2]);
   List result(ctx.length);
 
   for (int i = 0; i < ctx.length; ++i) {
