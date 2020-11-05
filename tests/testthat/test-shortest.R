@@ -1,8 +1,8 @@
 test_that("shortest (generic test)", {
   d <- array(1, dim=c(4, 3, 6))
-  d[3, 1, 2] <- 2
-  d[4, 1, 2] <- 2
-  d[4, 1, 3] <- 2
+  d[2, 2, 5] <- 2
+  d[3, 1, 5] <- 2
+  d[4, 2, 6] <- 2
 
   expectedPrices <- matrix(c(1,1,2,4, 1, 0, 1, 2, 2, 1, 2, 2),
                            nrow=4, ncol=3, byrow=FALSE)
@@ -20,10 +20,8 @@ test_that("shortest (generic test)", {
 
 test_that("shortest (simple path)", {
   d <- matrix(1, nrow=4, ncol=3)
-  d[4, ] <- 10
-  d[1, 3] <- 10
   d[2, 2] <- 10
-  d[3, c(1, 3)] <- 10
+  d[3, 1] <- 10
 
   res <- shortest(7, 2, d)
   expect_equal(res$path, c(7, 10, 5, 1, 2))
@@ -32,7 +30,7 @@ test_that("shortest (simple path)", {
   d[2, 3] <- NA
   res <- shortest(7, 2, d)
   expect_equal(res$path, c(7, 6, 2))
-  expect_equal(res$prices, c(0, 10, 11))
+  expect_equal(res$prices, c(0, 1, 11))
 })
 
 
@@ -42,4 +40,20 @@ test_that("shortest (nonexistent path)", {
 
   res <- shortest(1, 11, d)
   expect_equal(res, NULL)
+})
+
+test_that("shortest (multilayer path)", {
+  d <- array(100:144, dim=c(4, 3, 2, 6))
+  t <- array(100:124, dim=c(4, 3, 2))
+
+  d[2, 2, 1, 2] <- 1
+  t[1, 2, 1] <- 1
+  d[1, 2, 2, 4] <- 1
+  d[2, 3, 2, 4] <- 1
+  t[3, 3, 2] <- 1
+  d[3, 3, 1, 5] <- 1
+
+  res <- shortest(6, 12, d, t)
+  expect_equal(res$path, c(6, 5, 17, 22, 23, 11, 12))
+  expect_equal(res$prices, c(0, 1, 2, 3, 4, 5, 6))
 })

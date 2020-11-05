@@ -31,7 +31,7 @@ test_that("reachability (dist is matrix)", {
   res <- reachability(m, dist=d)
   expect_equal(res$init, 6)
   expect_equal(res$prices,
-               array(c(1,1,3,3, 1,0,1,2, 2,1,2,2),
+               array(c(1,1,1,3, 1,0,1,2, 2,1,2,2),
                      dim=c(4, 3, 1)))
   expect_equal(res$paths,
                array(c(6, 6, 6, 8, 6, 0, 6, 7, 10, 6, 10, 7),
@@ -44,7 +44,7 @@ test_that("reachability (dist is array)", {
   m[2, 2] <- 0
   d <- array(1, dim=c(4, 3, 1, 6))
 
-  d[3, 1, 1, 2] <- 2
+  d[2, 2, 1, 5] <- 2
   res <- reachability(m, dist=d)
   expect_equal(res$init, 6)
   expect_equal(res$prices,
@@ -54,7 +54,7 @@ test_that("reachability (dist is array)", {
                array(c(6, 6, 6, 8, 6, 0, 6, 7, 10, 6, 10, 7),
                      dim=c(4, 3, 1)))
 
-  d[4, 1, 1, 2] <- 2
+  d[3, 1, 1, 5] <- 2
   res <- reachability(m, dist=d)
   expect_equal(res$init, 6)
   expect_equal(res$prices,
@@ -64,7 +64,7 @@ test_that("reachability (dist is array)", {
                array(c(6, 6, 6, 8, 6, 0, 6, 7, 10, 6, 10, 7),
                      dim=c(4, 3, 1)))
 
-  d[4, 1, 1, 3] <- 2
+  d[4, 2, 1, 6] <- 2
   res <- reachability(m, dist=d)
   expect_equal(res$init, 6)
   expect_equal(res$prices,
@@ -91,9 +91,9 @@ test_that("reachability to a specific target", {
   m[2, 2] <- 0
 
   d <- array(1, dim=c(4, 3, 1, 6))
-  d[3, 1, 1, 2] <- 2
-  d[4, 1, 1, 2] <- 2
-  d[4, 1, 1, 3] <- 2
+  d[2, 2, 1, 5] <- 2
+  d[3, 1, 1, 5] <- 2
+  d[4, 2, 1, 6] <- 2
 
   expectedPrices <- array(c(1,1,2,4, 1, 0, 1, 2, 2, 1, 2, 2),
                           dim=c(4, 3, 1))

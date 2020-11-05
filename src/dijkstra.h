@@ -71,12 +71,9 @@ public:
         int other = neighbour(cur.i, dir);
         if (other < 0)
           continue;
-
-        int oppositeDir = oppositeDirection(cur.i, dir);
-        double price = edgePrice(other, oppositeDir);
+        double price = edgePrice(cur.i, dir);
         if (!IS_FINITE(price))
           continue;
-
         double otherPrice = priceMatrix[other];
         double newPrice = cur.price + price;
 
