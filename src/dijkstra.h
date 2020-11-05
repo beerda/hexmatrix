@@ -3,6 +3,7 @@
 
 
 #include <queue>
+#include <exception>
 #include "hexmatrix.h"
 
 
@@ -38,22 +39,21 @@ public:
 
   void addStart(const int vertex, const double price)
   {
+    if (vertex < 0 || vertex > rowcols * layers) {
+      throw std::out_of_range("'vertex' out of range in addStart()");
+    }
     DijkstraQueueElement v = DijkstraQueueElement(vertex, price);
     queue.push(v);
   }
 
   const double edgePrice(const int vertex, const int direction) const
   {
-    int sourceLayer, targetLayer = 0;
-    layerIndices(vertex, direction, sourceLayer, targetLayer);
-    if (sourceLayer == targetLayer) {
-      int index = vertex + rowcols * layers * direction;
-      return dist[index];
+    if (direction >= 6) {
+      return trans[transIndex(vertex, direction)];
+    } else if (direction >= 0) {
+      return dist[distIndex(vertex, direction)];
     } else {
-      int index = (vertex % rowcols) + rowcols
-        * (sourceLayer * (layers - 1)
-             + (sourceLayer < targetLayer ? targetLayer - 1 : targetLayer));
-      return trans[index];
+      throw std::out_of_range("Invalid 'direction' in edgePrice()");
     }
   }
 

@@ -2,6 +2,7 @@
 #define HGRAPH_H
 
 
+#include <exception>
 #include "hexmatrix.h"
 
 
@@ -27,6 +28,12 @@ public:
                     int& sourceLayer,
                     int& targetLayer) const
   {
+    if (vertex < 0 || vertex > rowcols * layers) {
+      throw std::out_of_range("vertex out of range in layerIndices()");
+    }
+    if (direction < 0 || direction > getDirections()) {
+      throw std::out_of_range("direction out of range in layerIndices()");
+    }
     sourceLayer = vertex / rowcols;
     if (direction < 6) {
       targetLayer = sourceLayer;
@@ -40,6 +47,12 @@ public:
 
   const int neighbour(const int vertex, const int direction) const
   {
+    if (vertex < 0 || vertex > rowcols * layers) {
+      throw std::out_of_range("'vertex' out of range in layerIndices()");
+    }
+    if (direction < 0 || direction > getDirections()) {
+      throw std::out_of_range("'direction' out of range in layerIndices()");
+    }
     int sourceLayer, targetLayer = 0;
     layerIndices(vertex, direction, sourceLayer, targetLayer);
     if (sourceLayer == targetLayer) {
@@ -53,8 +66,31 @@ public:
     }
   }
 
+  const int whichDirection(const int from, const int to) const
+  {
+    if (from < 0 || from > rowcols * layers) {
+      throw std::out_of_range("'from' out of range in whichDirection()");
+    }
+    if (to < 0 || to > rowcols * layers) {
+      throw std::out_of_range("'to' out of range in whichDirection()");
+    }
+    int dir = getDirections();
+    while (dir >= 0) {
+      if (neighbour(from, dir) == to)
+        break;
+      dir--;
+    }
+    return dir;
+  }
+
   const int oppositeDirection(const int vertex, const int direction) const
   {
+    if (vertex < 0 || vertex > rowcols * layers) {
+      throw std::out_of_range("'vertex' out of range in oppositeDirection()");
+    }
+    if (direction < 0 || direction > getDirections()) {
+      throw std::out_of_range("'direction' out of range in oppositeDirection()");
+    }
     int sourceLayer, targetLayer = 0;
     layerIndices(vertex, direction, sourceLayer, targetLayer);
     if (sourceLayer == targetLayer) {
@@ -62,6 +98,32 @@ public:
     } else {
       return (sourceLayer < targetLayer) ? 6 + sourceLayer : 6 + sourceLayer - 1;
     }
+  }
+
+  const int distIndex(const int vertex, const int direction) const
+  {
+    if (vertex < 0 || vertex > rowcols * layers) {
+      throw std::out_of_range("'vertex' out of range in distIndex()");
+    }
+    if (direction < 0 || direction > 5) {
+      throw std::out_of_range("'direction' out of range in distIndex()");
+    }
+    return vertex + rowcols * layers * direction;
+  }
+
+  const int transIndex(const int vertex, const int direction) const
+  {
+    if (vertex < 0 || vertex > rowcols * layers) {
+      throw std::out_of_range("'vertex' out of range in transIndex()");
+    }
+    if (direction < 6 || direction > getDirections()) {
+      throw std::out_of_range("'direction' out of range in transIndex()");
+    }
+    int sourceLayer, targetLayer = 0;
+    layerIndices(vertex, direction, sourceLayer, targetLayer);
+    return (vertex % rowcols) + rowcols
+      * (sourceLayer * (layers - 1)
+         + (sourceLayer < targetLayer ? targetLayer - 1 : targetLayer));
   }
 };
 
