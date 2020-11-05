@@ -57,9 +57,10 @@ public:
     }
   }
 
-  void process(NumericVector &priceMatrix,
+  bool process(NumericVector &priceMatrix,
                NumericVector &pathMatrix,
                int target) {
+    bool changed = false;
     while (!queue.empty()) {
       DijkstraQueueElement cur = queue.top();
       queue.pop();
@@ -78,6 +79,7 @@ public:
         double newPrice = cur.price + price;
 
         if ((!IS_FINITE(otherPrice)) || (otherPrice > newPrice)) {
+          changed = true;
           priceMatrix[other] = newPrice;
           pathMatrix[other] = cur.i;
           DijkstraQueueElement v = DijkstraQueueElement(other, newPrice);
@@ -85,6 +87,7 @@ public:
         }
       }
     }
+    return changed;
   }
 };
 

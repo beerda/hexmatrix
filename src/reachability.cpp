@@ -23,10 +23,11 @@ List reachability(const NumericVector m,
     }
   }
 
-  graph.process(priceMatrix, pathMatrix, target);
+  bool changed = graph.process(priceMatrix, pathMatrix, target);
 
   return List::create(
     _["prices"] = priceMatrix,
     _["paths"] = pathMatrix,
-    _["init"] = init);
+    _["init"] = init,
+    _["changed"] = changed);
 }
