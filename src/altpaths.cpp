@@ -103,12 +103,18 @@ private:
 
 
 // [[Rcpp::export(name=".altpaths")]]
-List altpaths(int source, int target, const NumericVector dist, const NumericMatrix regions,
-              int n, int step, const Function f) {
+List altpaths(int source,
+              int target,
+              const NumericMatrix regions,
+              const NumericVector dist,
+              const NumericVector trans,
+              int n,
+              int step,
+              const Function f) {
   std::vector<Path> res;
   std::priority_queue<Path> candidates;
 
-  List sh = shortest(source, target, dist);
+  List sh = shortest(source, target, dist, trans);
   if (!sh.length()) { // path not found
     return List::create();
   }
@@ -124,13 +130,13 @@ List altpaths(int source, int target, const NumericVector dist, const NumericMat
     for (int spurIndex = 0; spurIndex < best.path.length() - step - 1; spurIndex += step) {
       int spurNode = best.path[spurIndex];
       Distance modDist = Distance(dist, regions, step);
-      for (int j = 0; j < res.size(); ++j) {
+      for (unsigned int j = 0; j < res.size(); ++j) {
         if (best.commonPrefix(res[j], spurIndex)) {
           modDist.disableAfter(res[j], spurIndex);
         }
       }
       //modDist.disableRoot(best, spurIndex);
-      sh = shortest(source, target, modDist.dist);
+      sh = shortest(source, target, modDist.dist, trans);
       if (sh.length()) { // path found
         //Path foundPath = Path(best, spurIndex, sh);
         Path foundPath = Path(sh);
@@ -145,7 +151,7 @@ List altpaths(int source, int target, const NumericVector dist, const NumericMat
       candidates.pop();
 
       bool equal = false;
-      for (int i = 0; i < res.size(); ++i) {
+      for (unsigned int i = 0; i < res.size(); ++i) {
         if (best.equalTo(res[i])) {
           equal = true;
           break;
@@ -165,7 +171,7 @@ List altpaths(int source, int target, const NumericVector dist, const NumericMat
 
   // gather results
   List result = List();
-  for (int i = 0; i < res.size(); ++i) {
+  for (unsigned int i = 0; i < res.size(); ++i) {
     result.push_back(List::create(_["prices"] = res[i].prices,
                                   _["path"] = res[i].path));
   }
