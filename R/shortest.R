@@ -27,11 +27,9 @@ shortest <- function(source,
   assert_that(length(dim(trans)) == 3)
   assert_that(all(dim(trans) == c(rows, cols, layers * (layers - 1))))
 
-  assert_that(is.scalar(source))
   assert_that(is.count(source))
   assert_that(source <= rows * cols * layers)
 
-  assert_that(is.scalar(target))
   assert_that(is.count(target))
   assert_that(target <= rows * cols * layers)
 
