@@ -12,12 +12,14 @@ public:
   const int cols;
   const int layers;
   const int rowcols;
+  const int length;
 
   Graph(int aRows, int aCols, int aLayers) :
   rows(aRows),
   cols(aCols),
   layers(aLayers),
-  rowcols(aRows * aCols)
+  rowcols(aRows * aCols),
+  length(aRows * aCols * aLayers)
   { }
 
   const int getDirections() const
@@ -28,7 +30,7 @@ public:
                     int& sourceLayer,
                     int& targetLayer) const
   {
-    if (vertex < 0 || vertex > rowcols * layers) {
+    if (vertex < 0 || vertex > length) {
       throw std::out_of_range("vertex out of range in layerIndices()");
     }
     if (direction < 0 || direction > getDirections()) {
@@ -47,7 +49,7 @@ public:
 
   const int neighbour(const int vertex, const int direction) const
   {
-    if (vertex < 0 || vertex > rowcols * layers) {
+    if (vertex < 0 || vertex > length) {
       throw std::out_of_range("'vertex' out of range in layerIndices()");
     }
     if (direction < 0 || direction > getDirections()) {
@@ -68,10 +70,10 @@ public:
 
   const int whichDirection(const int from, const int to) const
   {
-    if (from < 0 || from > rowcols * layers) {
+    if (from < 0 || from > length) {
       throw std::out_of_range("'from' out of range in whichDirection()");
     }
-    if (to < 0 || to > rowcols * layers) {
+    if (to < 0 || to > length) {
       throw std::out_of_range("'to' out of range in whichDirection()");
     }
     int dir = getDirections();
@@ -85,7 +87,7 @@ public:
 
   const int oppositeDirection(const int vertex, const int direction) const
   {
-    if (vertex < 0 || vertex > rowcols * layers) {
+    if (vertex < 0 || vertex > length) {
       throw std::out_of_range("'vertex' out of range in oppositeDirection()");
     }
     if (direction < 0 || direction > getDirections()) {
@@ -102,18 +104,18 @@ public:
 
   const int distIndex(const int vertex, const int direction) const
   {
-    if (vertex < 0 || vertex > rowcols * layers) {
+    if (vertex < 0 || vertex > length) {
       throw std::out_of_range("'vertex' out of range in distIndex()");
     }
     if (direction < 0 || direction > 5) {
       throw std::out_of_range("'direction' out of range in distIndex()");
     }
-    return vertex + rowcols * layers * direction;
+    return vertex + length * direction;
   }
 
   const int transIndex(const int vertex, const int direction) const
   {
-    if (vertex < 0 || vertex > rowcols * layers) {
+    if (vertex < 0 || vertex > length) {
       throw std::out_of_range("'vertex' out of range in transIndex()");
     }
     if (direction < 6 || direction > getDirections()) {

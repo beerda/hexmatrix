@@ -21,10 +21,6 @@
     .Call(`_hexmatrix_reachability`, m, dist, trans, target)
 }
 
-.shortest <- function(source, target, dist) {
-    .Call(`_hexmatrix_shortest`, source, target, dist)
-}
-
 .region <- function(m, index) {
     .Call(`_hexmatrix_region`, m, index)
 }
@@ -43,5 +39,9 @@
 
 .shiftLeft <- function(v, rows, cols, odd) {
     .Call(`_hexmatrix_shiftLeft`, v, rows, cols, odd)
+}
+
+.shortest <- function(source, target, dist, trans) {
+    .Call(`_hexmatrix_shortest`, source, target, dist, trans)
 }
 

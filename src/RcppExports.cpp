@@ -77,19 +77,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// shortest
-List shortest(int source, int target, const NumericVector dist);
-RcppExport SEXP _hexmatrix_shortest(SEXP sourceSEXP, SEXP targetSEXP, SEXP distSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type source(sourceSEXP);
-    Rcpp::traits::input_parameter< int >::type target(targetSEXP);
-    Rcpp::traits::input_parameter< const NumericVector >::type dist(distSEXP);
-    rcpp_result_gen = Rcpp::wrap(shortest(source, target, dist));
-    return rcpp_result_gen;
-END_RCPP
-}
 // region
 NumericVector region(const NumericVector m, int index);
 RcppExport SEXP _hexmatrix_region(SEXP mSEXP, SEXP indexSEXP) {
@@ -154,6 +141,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// shortest
+List shortest(int source, int target, const NumericVector dist, const NumericVector trans);
+RcppExport SEXP _hexmatrix_shortest(SEXP sourceSEXP, SEXP targetSEXP, SEXP distSEXP, SEXP transSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type source(sourceSEXP);
+    Rcpp::traits::input_parameter< int >::type target(targetSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type dist(distSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type trans(transSEXP);
+    rcpp_result_gen = Rcpp::wrap(shortest(source, target, dist, trans));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 RcppExport SEXP run_testthat_tests(SEXP);
 
@@ -163,12 +164,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_hexmatrix_path", (DL_FUNC) &_hexmatrix_path, 2},
     {"_hexmatrix_pathReduce", (DL_FUNC) &_hexmatrix_pathReduce, 5},
     {"_hexmatrix_reachability", (DL_FUNC) &_hexmatrix_reachability, 4},
-    {"_hexmatrix_shortest", (DL_FUNC) &_hexmatrix_shortest, 3},
     {"_hexmatrix_region", (DL_FUNC) &_hexmatrix_region, 2},
     {"_hexmatrix_shiftDown", (DL_FUNC) &_hexmatrix_shiftDown, 2},
     {"_hexmatrix_shiftUp", (DL_FUNC) &_hexmatrix_shiftUp, 2},
     {"_hexmatrix_shiftRight", (DL_FUNC) &_hexmatrix_shiftRight, 4},
     {"_hexmatrix_shiftLeft", (DL_FUNC) &_hexmatrix_shiftLeft, 4},
+    {"_hexmatrix_shortest", (DL_FUNC) &_hexmatrix_shortest, 4},
     {"run_testthat_tests",      (DL_FUNC) &run_testthat_tests,      1},
     {NULL, NULL, 0}
 };

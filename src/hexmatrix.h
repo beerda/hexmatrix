@@ -14,7 +14,7 @@ extern int neigh(int dir, int i, int rows, int cols);
 extern int whichDir(int cur, int other, int rows, int cols);
 
 // reachability.cpp
-extern List shortest(int source, int target, const NumericVector dist);
+extern List shortest(int source, int target, const NumericVector dist, const NumericVector trans);
 
 // region.cpp
 extern NumericVector region(const NumericVector m, int index);
