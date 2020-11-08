@@ -2,10 +2,25 @@
 % Please edit documentation in R/point.R
 \name{point}
 \alias{point}
+\alias{point.matrix}
+\alias{point.array}
+\alias{is.point}
+\alias{is.point.matrix}
+\alias{is.point.array}
 \title{Get coordinates (i.e., row, column, (layer)) of an element of a matrix or
 array given by the index.}
 \usage{
 point(m, index, ...)
+
+\method{point}{matrix}(m, index, ...)
+
+\method{point}{array}(m, index, ...)
+
+is.point(m, point)
+
+\method{is.point}{matrix}(m, point)
+
+\method{is.point}{array}(m, point)
 }
 \arguments{
 \item{m}{A matrix or an array whose element coordinates have to be computed}

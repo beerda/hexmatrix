@@ -14,27 +14,58 @@ point <- function(m, index, ...) {
 }
 
 
-#' @rdname index
+#' @rdname point
 #' @export
 point.matrix <- function(m, index, ...) {
   assert_that(is.hexmatrix(m))
-  assert_that(is.count(index))
-  assert_that(index <= nrow(m) * ncol(m))
+  assert_that(is.index(m, index))
 
   c((index - 1) %% nrow(m) + 1,
     ((index - 1) %/% nrow(m)) + 1)
 }
 
 
-#' @rdname index
+#' @rdname point
 #' @export
 point.array <- function(m, index, ...) {
   assert_that(is.hexarray(m))
-  assert_that(is.count(index))
-  assert_that(index <= nrow(m) * ncol(m) * nlayer(m))
+  assert_that(is.index(m, index))
 
   rowcol <- nrow(m) * ncol(m)
   c((index - 1) %% nrow(m) + 1,
     ((index - 1) %% rowcol) %/% nrow(m) + 1,
     (index - 1) %/% rowcol + 1)
+}
+
+
+#' @rdname point
+#' @export
+is.point <- function(m, point) {
+  UseMethod('is.point')
+}
+
+
+#' @rdname point
+#' @export
+is.point.matrix <- function(m, point) {
+  is.vector(point) &&
+    length(point) == 2 &&
+    is.count(point[1]) &&
+    is.count(point[2]) &&
+    point[1] <= nrow(m) &&
+    point[2] <= ncol(m)
+}
+
+
+#' @rdname point
+#' @export
+is.point.array <- function(m, point) {
+  is.vector(point) &&
+    length(point) == 3 &&
+    is.count(point[1]) &&
+    is.count(point[2]) &&
+    is.count(point[3]) &&
+    point[1] <= nrow(m) &&
+    point[2] <= ncol(m) &&
+    point[3] <= nlayer(m)
 }
