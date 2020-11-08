@@ -44,3 +44,10 @@ index.array <- function(m, point, ...) {
 
   point[1] + nrow(m) * (point[2] - 1) + nrow(m) * ncol(m) * (point[3] - 1)
 }
+
+
+#' @rdname index
+#' @export
+is.index <- function(m, i) {
+  is.count(i) && (i <= length(m))
+}
