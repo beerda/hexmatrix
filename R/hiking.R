@@ -22,5 +22,7 @@
 #' # speed on a path with flat surface
 #' hiking(0)
 hiking <- function(gradient) {
+  assert_that(is.numeric(gradient))
+
   6 * exp((-3.5) * abs(gradient + 0.05))
 }

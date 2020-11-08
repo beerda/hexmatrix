@@ -15,10 +15,8 @@
 #' @export
 hexline <- function(m, start, end) {
   assert_that(is.hexmatrix(m) || is.hexarray(m))
-  assert_that(is.count(start))
-  assert_that(start <= length(m))
-  assert_that(is.count(end))
-  assert_that(end <= length(m))
+  assert_that(is.index(m, start))
+  assert_that(is.index(m, end))
   assert_that(start %/% (nrow(m) * ncol(m)) == end %/% (nrow(m) * ncol(m)))
 
   from <- min(start, end)

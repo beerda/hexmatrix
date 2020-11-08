@@ -6,10 +6,7 @@ reachability <- function(m,
   # --- m assertions
   assert_that(is.numeric(m))
   assert_that(is.hexmatrix(m) || is.hexarray(m))
-
-  if (is.hexmatrix(m)) {
-    dim(m) <- c(dim(m), 1)
-  }
+  m <- as.hexarray(m)
 
   rows <- nrow(m)
   cols <- ncol(m)
@@ -41,8 +38,7 @@ reachability <- function(m,
 
   # --- target assertions
   if (!is.null(target)) {
-    assert_that(is.count(target))
-    assert_that(target <= length(m))
+    assert_that(is.index(m, target))
   } else {
     target <- 0   # search cheapest paths to all cells
   }

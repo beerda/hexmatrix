@@ -10,10 +10,8 @@ pathReduce <- function(f, origin, path, dist=1, trans=0) {
   assert_that(is.numeric(path))
   assert_that(min(path, na.rm=TRUE) >= 0)
   assert_that(max(path, na.rm=TRUE) <= length(path))
-  if (is.hexmatrix(path)) {
-    dim(path) <- c(dim(path), 1)
-  }
-  assert_that(is.hexarray(path))
+  assert_that(is.hexmatrix(path) || is.hexarray(path))
+  path <- as.hexarray(path)
 
   rows <- nrow(path)
   cols <- ncol(path)

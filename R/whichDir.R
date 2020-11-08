@@ -1,5 +1,4 @@
-#' Return the number of direction from the current to the other neighbouring
-#' cell in a hexmatrix.
+#' Return the direction number from `current` to `other` cell of a hexmatrix.
 #'
 #' @param current The index of the actual cell in hexmatrix
 #' @param other The index of the neighbouring cell
@@ -8,9 +7,9 @@
 #'   `other` cell. `NA` is returned if `current` and `other` are not neighbours.
 #' @export
 whichDir <- function(current, other, m) {
-  assert_that(is.number(current))
-  assert_that(is.number(other))
   assert_that(is.hexmatrix(m) || is.hexarray(m))
+  assert_that(is.index(m, current))
+  assert_that(is.index(m, other))
 
   res <- .Call('_hexmatrix_whichDir', PACKAGE = 'hexmatrix', current - 1, other - 1, nrow(m), ncol(m))
   ifelse(res < 0, NA, res + 1)

@@ -2,8 +2,7 @@
 % Please edit documentation in R/whichDir.R
 \name{whichDir}
 \alias{whichDir}
-\title{Return the number of direction from the current to the other neighbouring
-cell in a hexmatrix.}
+\title{Return the direction number from \code{current} to \code{other} cell of a hexmatrix.}
 \usage{
 whichDir(current, other, m)
 }
@@ -19,6 +18,5 @@ A number from 1 to 6 indicating the direction from \code{current} to
 \code{other} cell. \code{NA} is returned if \code{current} and \code{other} are not neighbours.
 }
 \description{
-Return the number of direction from the current to the other neighbouring
-cell in a hexmatrix.
+Return the direction number from \code{current} to \code{other} cell of a hexmatrix.
 }

@@ -11,8 +11,7 @@
 #' @export
 region <- function(m, i) {
   assert_that(is.hexmatrix(m) || is.hexarray(m))
-  assert_that(is.count(i))
-  assert_that(i <= length(m))
+  assert_that(is.index(m, i))
 
   res <- .Call('_hexmatrix_region', PACKAGE = 'hexmatrix', m, i - 1);
   sort(res) + 1

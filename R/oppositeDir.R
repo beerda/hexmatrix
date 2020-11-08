@@ -16,5 +16,8 @@
 #' 4, 2 for 5, 3 for 6 and 7 for 7.
 #' @export
 oppositeDir <- function(dir) {
+  assert_that(is.count(dir))
+  assert_that(dir <= 7)
+
   ifelse(dir == 7, 7, (dir + 2) %% 6 + 1)
 }

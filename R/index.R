@@ -20,11 +20,7 @@ index <- function(m, point, ...) {
 #' @export
 index.matrix <- function(m, point, ...) {
   assert_that(is.hexmatrix(m))
-  assert_that(length(point) == 2)
-  assert_that(is.count(point[1]))
-  assert_that(is.count(point[2]))
-  assert_that(point[1] <= nrow(m))
-  assert_that(point[2] <= ncol(m))
+  assert_that(is.point(m, point))
 
   point[1] + nrow(m) * (point[2] - 1)
 }
@@ -34,13 +30,7 @@ index.matrix <- function(m, point, ...) {
 #' @export
 index.array <- function(m, point, ...) {
   assert_that(is.hexarray(m))
-  assert_that(length(point) == 3)
-  assert_that(is.count(point[1]))
-  assert_that(is.count(point[2]))
-  assert_that(is.count(point[3]))
-  assert_that(point[1] <= nrow(m))
-  assert_that(point[2] <= ncol(m))
-  assert_that(point[3] <= nlayer(m))
+  assert_that(is.point(m, point))
 
   point[1] + nrow(m) * (point[2] - 1) + nrow(m) * ncol(m) * (point[3] - 1)
 }

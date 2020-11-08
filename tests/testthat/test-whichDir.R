@@ -11,7 +11,7 @@ test_that("whichDir(matrix)", {
   expect_equal(whichDir(6, 9, m), NA)
   expect_equal(whichDir(6, 11, m), NA)
   expect_equal(whichDir(6, 12, m), NA)
-  expect_equal(whichDir(6, 13, m), NA)
+  expect_error(whichDir(6, 13, m))
 })
 
 
@@ -40,7 +40,7 @@ test_that("whichDir(array)", {
   expect_equal(whichDir(6, 22, m), NA)
   expect_equal(whichDir(6, 23, m), NA)
   expect_equal(whichDir(6, 24, m), NA)
-  expect_equal(whichDir(6, 25, m), NA)
+  expect_error(whichDir(6, 25, m))
 
   expect_equal(whichDir(18, 1+12, m), 1)
   expect_equal(whichDir(18, 5+12, m), 2)

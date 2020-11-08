@@ -1,7 +1,7 @@
 #' @export
 morph <- function(m, dilate=TRUE, na.rm=FALSE) {
-  assert_that(is.scalar(dilate) && is.logical(dilate))
-  assert_that(is.scalar(na.rm) && is.logical(na.rm))
+  assert_that(is.flag(dilate))
+  assert_that(is.flag(na.rm))
 
   if (is.hexmatrix(m)) {
     f <- ifelse(dilate, pmax, pmin)
