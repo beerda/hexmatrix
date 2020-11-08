@@ -6,6 +6,7 @@ int yDiffOdd[] = {-1, 0, 1, 0, -1, -1 };
 int yDiffEven[] = {0, 1, 1, 1, 0, -1};
 
 
+// [[Rcpp::export(name=".neigh")]]
 int neigh(int dir, int i, int rows, int cols)
 {
   int rowcol = rows * cols;

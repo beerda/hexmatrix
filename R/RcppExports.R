@@ -5,6 +5,10 @@
     .Call(`_hexmatrix_altpaths`, source, target, regions, dist, trans, n, step, f)
 }
 
+.neigh <- function(dir, i, rows, cols) {
+    .Call(`_hexmatrix_neigh`, dir, i, rows, cols)
+}
+
 .whichDir <- function(cur, other, rows, cols) {
     .Call(`_hexmatrix_whichDir`, cur, other, rows, cols)
 }

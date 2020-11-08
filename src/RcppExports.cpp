@@ -23,6 +23,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// neigh
+int neigh(int dir, int i, int rows, int cols);
+RcppExport SEXP _hexmatrix_neigh(SEXP dirSEXP, SEXP iSEXP, SEXP rowsSEXP, SEXP colsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type dir(dirSEXP);
+    Rcpp::traits::input_parameter< int >::type i(iSEXP);
+    Rcpp::traits::input_parameter< int >::type rows(rowsSEXP);
+    Rcpp::traits::input_parameter< int >::type cols(colsSEXP);
+    rcpp_result_gen = Rcpp::wrap(neigh(dir, i, rows, cols));
+    return rcpp_result_gen;
+END_RCPP
+}
 // whichDir
 int whichDir(int cur, int other, int rows, int cols);
 RcppExport SEXP _hexmatrix_whichDir(SEXP curSEXP, SEXP otherSEXP, SEXP rowsSEXP, SEXP colsSEXP) {
@@ -161,6 +175,7 @@ RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_hexmatrix_altpaths", (DL_FUNC) &_hexmatrix_altpaths, 8},
+    {"_hexmatrix_neigh", (DL_FUNC) &_hexmatrix_neigh, 4},
     {"_hexmatrix_whichDir", (DL_FUNC) &_hexmatrix_whichDir, 4},
     {"_hexmatrix_path", (DL_FUNC) &_hexmatrix_path, 2},
     {"_hexmatrix_pathReduce", (DL_FUNC) &_hexmatrix_pathReduce, 5},
