@@ -42,3 +42,31 @@ as.hexarray <- function(x, ...) {
 nlayer <- function(x) {
   dim(x)[3L]
 }
+
+
+#' @export
+layernames <- function(x) {
+  assert_that(is.hexarray(x))
+  dimnames(x)[[3L]]
+}
+
+
+#' @export
+`layernames<-` <- function(x, value) {
+  assert_that(is.hexarray(x))
+
+  dn <- dimnames(x)
+  if (is.null(dn)) {
+    if (is.null(value)) {
+      return(x)
+    }
+    dn <- vector('list', 3L)
+  }
+  if (is.null(value)) {
+    dn[3L] <- list(NULL)
+  } else {
+    dn[[3L]] <- value
+  }
+  dimnames(x) <- dn
+  x
+}
