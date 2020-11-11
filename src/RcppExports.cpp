@@ -6,14 +6,14 @@
 using namespace Rcpp;
 
 // altpaths
-List altpaths(int source, int target, const NumericMatrix regions, const NumericVector dist, const NumericVector trans, int n, int step, const Function f);
+List altpaths(int source, int target, const NumericVector regions, const NumericVector dist, const NumericVector trans, int n, int step, const Function f);
 RcppExport SEXP _hexmatrix_altpaths(SEXP sourceSEXP, SEXP targetSEXP, SEXP regionsSEXP, SEXP distSEXP, SEXP transSEXP, SEXP nSEXP, SEXP stepSEXP, SEXP fSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type source(sourceSEXP);
     Rcpp::traits::input_parameter< int >::type target(targetSEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix >::type regions(regionsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type regions(regionsSEXP);
     Rcpp::traits::input_parameter< const NumericVector >::type dist(distSEXP);
     Rcpp::traits::input_parameter< const NumericVector >::type trans(transSEXP);
     Rcpp::traits::input_parameter< int >::type n(nSEXP);

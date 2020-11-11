@@ -56,13 +56,13 @@ bool operator<(const Path& p1, const Path& p2) {
 class Distance {
 public:
   NumericVector dist;
-  NumericMatrix regions;
+  NumericVector regions;
   int step;
   int rows;
   int cols;
   int rowcols;
 
-  Distance(const NumericVector aDist, const NumericMatrix aRegions, int aStep) :
+  Distance(const NumericVector aDist, const NumericVector aRegions, int aStep) :
     dist(clone(aDist)),
     regions(aRegions),
     step(aStep),
@@ -105,7 +105,7 @@ private:
 // [[Rcpp::export(name=".altpaths")]]
 List altpaths(int source,
               int target,
-              const NumericMatrix regions,
+              const NumericVector regions,
               const NumericVector dist,
               const NumericVector trans,
               int n,
@@ -128,7 +128,7 @@ List altpaths(int source,
     best = res[i];
 
     for (int spurIndex = 0; spurIndex < best.path.length() - step - 1; spurIndex += step) {
-      int spurNode = best.path[spurIndex];
+      //int spurNode = best.path[spurIndex];
       Distance modDist = Distance(dist, regions, step);
       for (unsigned int j = 0; j < res.size(); ++j) {
         if (best.commonPrefix(res[j], spurIndex)) {
