@@ -13,7 +13,7 @@
 }
 
 #' @export
-hexline <- function(m, start, end) {
+line <- function(m, start, end) {
   assert_that(is.hexmatrix(m) || is.hexarray(m))
   assert_that(is.index(m, start))
   assert_that(is.index(m, end))
