@@ -58,22 +58,16 @@ public:
   NumericVector dist;
   NumericVector regions;
   int step;
-  int rows;
-  int cols;
-  int rowcols;
+  int len;
 
   Distance(const NumericVector aDist, const NumericVector aRegions, int aStep) :
     dist(clone(aDist)),
     regions(aRegions),
     step(aStep),
-    rows(0),
-    cols(0),
-    rowcols(0)
+    len(0)
   {
     NumericVector dim = aDist.attr("dim");
-    rows = dim[0];
-    cols = dim[1];
-    rowcols = rows * cols;
+    len = dim[0] * dim[1] * dim[2];
   }
 
   void disableAfter(Path p, int spurIndex) {
@@ -94,7 +88,7 @@ private:
     NumericVector reg = region(regions, node);
     for (int j = 0; j < reg.length(); ++j) {
       for (int i = 0; i < 6; ++i) {
-        int index = reg[j] + i * rowcols;
+        int index = reg[j] + i * len;
         dist[index] = 1e9;
       }
     }

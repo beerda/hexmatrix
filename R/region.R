@@ -13,6 +13,7 @@ region <- function(m, i) {
   assert_that(is.hexmatrix(m) || is.hexarray(m))
   assert_that(is.index(m, i))
 
+  m <- as.hexarray(m)
   res <- .Call('_hexmatrix_region', PACKAGE = 'hexmatrix', m, i - 1);
   sort(res) + 1
 }
