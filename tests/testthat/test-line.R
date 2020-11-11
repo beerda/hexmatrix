@@ -19,3 +19,14 @@ test_that("line", {
   expect_equal(line(m, 2, 10), 2:10)
   expect_equal(line(m, 10, 2), 2:10)
 })
+
+test_that("line<-", {
+  m <- matrix(1:100, nrow=10, ncol=10)
+  m2 <- matrix(1:100, nrow=10, ncol=10)
+
+  line(m, 1, 51) <- 0
+
+  indices <- c(1, 11, 21, 31, 41, 51)
+  expect_equal(m[indices], rep(0, length(indices)))
+  expect_equal(m[-indices], m2[-indices])
+})

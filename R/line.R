@@ -13,7 +13,7 @@
 }
 
 #' @export
-line <- function(m, start, end) {
+line <- function(m, start, end, indices=FALSE) {
   assert_that(is.hexmatrix(m) || is.hexarray(m))
   assert_that(is.index(m, start))
   assert_that(is.index(m, end))
@@ -70,5 +70,15 @@ line <- function(m, start, end) {
     res <- c(res, cur)
   }
 
+  if (!indices) {
+    res <- m[res]
+  }
   res
+}
+
+
+#' @export
+`line<-` <- function(m, start, end, value) {
+  m[line(m, start, end, indices=TRUE)] <- value
+  m
 }
