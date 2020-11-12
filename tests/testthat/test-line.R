@@ -30,3 +30,16 @@ test_that("line<-", {
   expect_equal(m[indices], rep(0, length(indices)))
   expect_equal(m[-indices], m2[-indices])
 })
+
+test_that("line (point)", {
+  m <- matrix(1:100, nrow=10, ncol=10)
+  m2 <- matrix(1:100, nrow=10, ncol=10)
+
+  expect_equal(line(m, c(1, 1), c(3, 10)),
+               c(1, 11, 21, 32, 42, 52, 62, 72, 73, 83, 93))
+
+  line(m, c(1, 1), c(1, 6)) <- 0
+  indices <- c(1, 11, 21, 31, 41, 51)
+  expect_equal(m[indices], rep(0, length(indices)))
+  expect_equal(m[-indices], m2[-indices])
+})

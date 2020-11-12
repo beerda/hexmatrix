@@ -15,6 +15,14 @@
 #' @export
 line <- function(m, start, end, indices=FALSE) {
   assert_that(is.hexmatrix(m) || is.hexarray(m))
+
+  if (is.point(m, start)) {
+    start <- index(m, start)
+  }
+  if (is.point(m, end)) {
+    end <- index(m, end)
+  }
+
   assert_that(is.index(m, start))
   assert_that(is.index(m, end))
   assert_that(start %/% (nrow(m) * ncol(m)) == end %/% (nrow(m) * ncol(m)))
