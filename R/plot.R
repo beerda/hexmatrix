@@ -6,7 +6,7 @@ plot.matrix <- function(m, ...) {
 
   g <- ggplot() +
     geom_hex(data=long(m, .forPlot=TRUE),
-             aes(x=x, y=y, fill=m),
+             aes(x=x, y=y, fill=m, group=1),
              stat='identity') +
     scale_y_reverse() +
     xlab('') + ylab('')
