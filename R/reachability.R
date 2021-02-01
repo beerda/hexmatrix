@@ -21,6 +21,10 @@ reachability <- function(m,
     assert_that(ncol(dist) == cols)
     dist <- array(dist, dim=c(rows, cols, layers, 6))
   }
+  if (length(dim(dist)) == 3) {
+    assert_that(all(dim(dist) == c(rows, cols, 6)))
+    dist <- array(dist, dim=c(rows, cols, layers, 6))
+  }
   assert_that(is.array(dist))
   assert_that(all(dim(dist) == c(rows, cols, layers, 6)))
 
