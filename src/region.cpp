@@ -2,7 +2,7 @@
 
 
 void regionInternal(int index, double val, NumericVector &hist, NumericVector &res, int rows, int cols) {
-  if (index >= 0 && index < hist.length() && hist[index] == val) {
+  if (index >= 0 && index < hist.length() && IS_FINITE(hist[index]) && hist[index] == val) {
     res.push_back(index);
     hist[index] = val - 1;
 

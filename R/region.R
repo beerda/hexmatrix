@@ -11,7 +11,10 @@
 #' @export
 region <- function(m, i) {
   assert_that(is.hexmatrix(m) || is.hexarray(m))
+  assert_that(is.numeric(m))
   assert_that(is.index(m, i))
+  assert_that(!is.na(m[i]))
+  assert_that(is.finite(m[i]))
 
   m <- as.hexarray(m)
   res <- .Call('_hexmatrix_region', PACKAGE = 'hexmatrix', m, i - 1);
