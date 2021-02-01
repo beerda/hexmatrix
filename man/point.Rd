@@ -8,7 +8,7 @@
 \alias{is.point.matrix}
 \alias{is.point.array}
 \title{Get coordinates (i.e., row, column, (layer)) of an element of a matrix or
-array given by the index.}
+array element given by the index.}
 \usage{
 point(m, index, ...)
 

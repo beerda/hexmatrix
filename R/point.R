@@ -1,5 +1,5 @@
 #' Get coordinates (i.e., row, column, (layer)) of an element of a matrix or
-#' array given by the index.
+#' array element given by the index.
 #'
 #' This function is an inverse function to [index()].
 #'
