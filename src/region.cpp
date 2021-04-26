@@ -1,19 +1,5 @@
+#include <stack>
 #include "hexmatrix.h"
-
-
-void regionInternal(int index, double val, NumericVector &hist, NumericVector &res, int rows, int cols) {
-  if (index >= 0 && index < hist.length() && IS_FINITE(hist[index]) && hist[index] == val) {
-    res.push_back(index);
-    hist[index] = val - 1;
-
-    for (int dir = 0; dir < 6; ++dir) {
-      int other = neigh(dir, index, rows, cols);
-      if (other >= 0) {
-        regionInternal(other, val, hist, res, rows, cols);
-      }
-    }
-  }
-}
 
 
 // [[Rcpp::export(name=".region")]]
@@ -23,6 +9,23 @@ NumericVector region(const NumericVector m, int index) {
   int cols = dim[1];
   NumericVector res = NumericVector();
   NumericVector hist = clone(m);
-  regionInternal(index, m[index], hist, res, rows, cols);
+
+  double val = m[index];
+  std::stack<int> stack;
+  stack.push(index);
+  while (!stack.empty()) {
+    index = stack.top(); stack.pop();
+    if (index >= 0 && index < hist.length() && IS_FINITE(hist[index]) && hist[index] == val) {
+      res.push_back(index);
+      hist[index] = val - 1;
+      for (int dir = 0; dir < 6; ++dir) {
+        int other = neigh(dir, index, rows, cols);
+        if (other >= 0) {
+          stack.push(other);
+        }
+      }
+    }
+  }
+
   return res;
 }
